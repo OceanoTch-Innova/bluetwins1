@@ -1,0 +1,10 @@
+/node_modules/
+/.wrangler/
+/.dev.vars
+/.dev.vars.*
+/.env
+/*.sqlite
+/*.sqlite-journal
+/oceanotech-backend/.env.integration.local
+/oceanotech-backend/.env.integration.local.*
+/oceanotech-backend/*.sqlite*

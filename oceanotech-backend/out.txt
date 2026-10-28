@@ -1,0 +1,8 @@
+  Listening on http://127.0.0.1:4000
+  Listening on http://[::1]:4000
+OceanoTech backend corriendo en http://localhost:4000
+  POST /api/auth/login
+  POST /api/auth/register
+  GET  /api/v1/twin/state/:twin_id
+  POST /api/v1/readings
+  GET  /api/v1/readings/latest

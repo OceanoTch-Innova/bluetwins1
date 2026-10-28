@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OceanoTech Dashboard - Unit Tests</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #0a0e1a;
+      color: #e0e0e0;
+    }
+    h1 { color: #00c8d8; border-bottom: 2px solid #00c8d8; padding-bottom: 10px; }
+    h2 { color: #00a8b8; margin-top: 30px; }
+    .test-suite { 
+      background: #151922; 
+      border: 1px solid #2a3040; 
+      border-radius: 8px; 
+      padding: 15px; 
+      margin: 15px 0; 
+    }
+    .test-case { 
+      padding: 8px 12px; 
+      margin: 5px 0; 
+      border-radius: 4px; 
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .test-case.pass { background: rgba(0, 217, 126, 0.1); border-left: 3px solid #00d97e; }
+    .test-case.fail { background: rgba(255, 64, 68, 0.1); border-left: 3px solid #ff4044; }
+    .test-name { flex: 1; }
+    .test-status { 
+      font-weight: bold; 
+      padding: 4px 12px; 
+      border-radius: 4px; 
+      font-size: 12px;
+    }
+    .test-status.pass { background: #00d97e; color: #000; }
+    .test-status.fail { background: #ff4044; color: #fff; }
+    .test-error { 
+      color: #ff6060; 
+      font-size: 12px; 
+      margin-top: 5px; 
+      font-family: monospace; 
+    }
+    .summary { 
+      background: #1a1f2e; 
+      padding: 20px; 
+      border-radius: 8px; 
+      margin: 20px 0;
+      border: 2px solid #00c8d8;
+    }
+    .summary-stat { 
+      display: inline-block; 
+      margin: 0 20px; 
+      font-size: 18px; 
+    }
+    .summary-stat strong { font-size: 24px; }
+    .pass-count { color: #00d97e; }
+    .fail-count { color: #ff4044; }
+    .total-count { color: #00c8d8; }
+    button {
+      background: #00c8d8;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      margin: 10px 5px;
+    }
+    button:hover { background: #00e5ff; }
+    .code-block {
+      background: #0d1117;
+      border: 1px solid #2a3040;
+      border-radius: 4px;
+      padding: 12px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧪 OceanoTech Dashboard - Unit Tests</h1>
+  
+  <div class="summary" id="summary">
+    <div class="summary-stat total-count">Total: <strong id="totalTests">0</strong></div>
+    <div class="summary-stat pass-count">Passed: <strong id="passedTests">0</strong></div>
+    <div class="summary-stat fail-count">Failed: <strong id="failedTests">0</strong></div>
+    <div class="summary-stat">Success Rate: <strong id="successRate">0%</strong></div>
+  </div>
+
+  <button onclick="runAllTests()">▶ Run All Tests</button>
+  <button onclick="clearResults()">🗑️ Clear Results</button>
+  <button onclick="exportResults()">📥 Export Results</button>
+
+  <div id="testResults"></div>
+
+  <script src="Script.js"></script>
+  <script>
+    /* ═══════════════════════════════════════════════════════════════
+       TEST FRAMEWORK
+       ═══════════════════════════════════════════════════════════════ */
+
+    const TestFramework = {
+      results: [],
+      
+      assert(condition, message) {
+        if (!condition) {
+          throw new Error(message || 'Assertion failed');
+        }
+      },
+
+      assertEqual(actual, expected, message) {
+        if (actual !== expected) {
+          throw new Error(message || `Expected ${expected}, got ${actual}`);
+        }
+      },
+
+      assertClose(actual, expected, tolerance = 0.001, message) {
+        if (Math.abs(actual - expected) > tolerance) {
+          throw new Error(message || `Expected ${expected} ± ${tolerance}, got ${actual}`);
+        }
+      },
+
+      assertRange(value, min, max, message) {
+        if (value < min || value > max) {
+          throw new Error(message || `Expected value between ${min} and ${max}, got ${value}`);
+        }
+      },
+
+      test(name, fn) {
+        try {
+          fn();
+          this.results.push({ name, status: 'pass', error: null });
+          return true;
+        } catch (error) {
+          this.results.push({ name, status: 'fail', error: error.message });
+          return false;
+        }
+      },
+
+      suite(suiteName, tests) {
+        const suiteResults = [];
+        for (const [testName, testFn] of Object.entries(tests)) {
+          const result = this.test(`${suiteName}: ${testName}`, testFn);
+          suiteResults.push(result);
+        }
+        return suiteResults;
+      },
+
+      clear() {
+        this.results = [];
+      },
+
+      getSummary() {
+        const total = this.results.length;
+        const passed = this.results.filter(r => r.status === 'pass').length;
+        const failed = total - passed;
+        const successRate = total > 0 ? ((passed / total) * 100).toFixed(1) : 0;
+        return { total, passed, failed, successRate };
+      }
+    };
+
+    /* ═══════════════════════════════════════════════════════════════
+       TEST SUITES
+       ═══════════════════════════════════════════════════════════════ */
+
+    const MathModelTests = {
+      'Temperature stress at optimal temp': () => {
+        const result = MathModels.fTemp(14.0);
+        TestFramework.assertClose(result, 1.0, 0.01, 'Should be 1.0 at optimal temperature');
+      },
+
+      'Temperature stress at cold temp': () => {
+        const result = MathModels.fTemp(5.0);
+        TestFramework.assertRange(result, 0.1, 0.5, 'Should be reduced at cold temperature');
+      },
+
+      'Temperature stress at hot temp': () => {
+        const result = MathModels.fTemp(22.0);
+        TestFramework.assertRange(result, 0.1, 0.6, 'Should be reduced at hot temperature');
+      },
+
+      'Oxygen stress at optimal DO': () => {
+        const result = MathModels.fOxy(8.0);
+        TestFramework.assertRange(result, 0.65, 0.75, 'Should be high at optimal DO');
+      },
+
+      'Oxygen stress at critical DO': () => {
+        const result = MathModels.fOxy(3.0);
+        TestFramework.assertRange(result, 0.0, 0.3, 'Should be very low at critical DO');
+      },
+
+      'Oxygen stress at lethal DO': () => {
+        const result = MathModels.fOxy(2.0);
+        TestFramework.assertEqual(result, 0, 'Should be 0 at lethal DO');
+      },
+
+      'Density stress at optimal density': () => {
+        const result = MathModels.fDens(15);
+        TestFramework.assertEqual(result, 1.0, 'Should be 1.0 at low density');
+      },
+
+      'Density stress at high density': () => {
+        const result = MathModels.fDens(35);
+        TestFramework.assertRange(result, 0.1, 0.5, 'Should be reduced at high density');
+      },
+
+      'Ammonia stress at safe level': () => {
+        const result = MathModels.fNH3(0.008);
+        TestFramework.assertEqual(result, 1.0, 'Should be 1.0 at safe ammonia level');
+      },
+
+      'Ammonia stress at elevated level': () => {
+        const result = MathModels.fNH3(0.030);
+        TestFramework.assertRange(result, 0.3, 0.7, 'Should be reduced at elevated ammonia');
+      },
+
+      'pH stress at optimal pH': () => {
+        const result = MathModels.fpH(7.5);
+        TestFramework.assertEqual(result, 1.0, 'Should be 1.0 at optimal pH');
+      },
+
+      'pH stress at low pH': () => {
+        const result = MathModels.fpH(6.7);
+        TestFramework.assertRange(result, 0.3, 0.8, 'Should be reduced at low pH');
+      },
+
+      'Combined stress calculation': () => {
+        const sensors = {
+          temperature: 14.0,
+          do: 8.0,
+          pH: 7.5,
+          ammonia: 0.008,
+        };
+        const stress = MathModels.calculateStress(sensors, 15);
+        TestFramework.assertRange(stress.total, 0.5, 1.0, 'Combined stress should be reasonable');
+      },
+    };
+
+    const UtilsTests = {
+      'Clamp value within range': () => {
+        const result = Utils.clamp(5, 0, 10);
+        TestFramework.assertEqual(result, 5, 'Should return value if within range');
+      },
+
+      'Clamp value below min': () => {
+        const result = Utils.clamp(-5, 0, 10);
+        TestFramework.assertEqual(result, 0, 'Should return min if below range');
+      },
+
+      'Clamp value above max': () => {
+        const result = Utils.clamp(15, 0, 10);
+        TestFramework.assertEqual(result, 10, 'Should return max if above range');
+      },
+
+      'Safe number with valid input': () => {
+        const result = Utils.safeNumber(42);
+        TestFramework.assertEqual(result, 42, 'Should return number if valid');
+      },
+
+      'Safe number with NaN': () => {
+        const result = Utils.safeNumber(NaN, 10);
+        TestFramework.assertEqual(result, 10, 'Should return fallback for NaN');
+      },
+
+      'Safe number with Infinity': () => {
+        const result = Utils.safeNumber(Infinity, 10);
+        TestFramework.assertEqual(result, 10, 'Should return fallback for Infinity');
+      },
+
+      'Format number with decimals': () => {
+        const result = Utils.formatNumber(3.14159, 2);
+        TestFramework.assertEqual(result, '3.14', 'Should format to 2 decimals');
+      },
+    };
+
+    const ValidatorTests = {
+      'Validate sensor data with valid input': () => {
+        const input = {
+          temperature: 12.5,
+          do: 8.0,
+          salinity: 33.0,
+          pH: 7.8,
+          ammonia: 0.01,
+          turbidity: 2.5,
+          flow: 1200,
+        };
+        const result = Validator.validateSensorData(input);
+        TestFramework.assertEqual(result.temperature, 12.5, 'Should preserve valid temperature');
+      },
+
+      'Validate sensor data with out-of-range values': () => {
+        const input = {
+          temperature: 50, // Too high
+          do: -5, // Too low
+          salinity: 33.0,
+          pH: 7.8,
+          ammonia: 0.01,
+          turbidity: 2.5,
+          flow: 1200,
+        };
+        const result = Validator.validateSensorData(input);
+        TestFramework.assertRange(result.temperature, 0, 30, 'Should clamp temperature');
+        TestFramework.assertRange(result.do, 0, 15, 'Should clamp DO');
+      },
+
+      'Validate sensor data with missing values': () => {
+        const input = { temperature: 12.5 };
+        const result = Validator.validateSensorData(input);
+        TestFramework.assert(result.do !== undefined, 'Should provide fallback for missing DO');
+        TestFramework.assert(result.pH !== undefined, 'Should provide fallback for missing pH');
+      },
+
+      'Validate simulation state': () => {
+        const input = { W: 150, N: 48000, biomass: 7.2, day: 45 };
+        const result = Validator.validateSimState(input);
+        TestFramework.assertEqual(result.W, 150, 'Should preserve valid weight');
+        TestFramework.assertEqual(result.N, 48000, 'Should preserve valid count');
+      },
+
+      'Validate canvas dimensions': () => {
+        const result = Validator.validateCanvasDimensions(800, 600);
+        TestFramework.assertEqual(result.width, 800, 'Should preserve valid width');
+        TestFramework.assertEqual(result.height, 600, 'Should preserve valid height');
+      },
+
+      'Validate canvas dimensions with invalid values': () => {
+        const result = Validator.validateCanvasDimensions(5000, -100);
+        TestFramework.assertRange(result.width, 10, 4096, 'Should clamp width');
+        TestFramework.assertRange(result.height, 10, 4096, 'Should clamp height');
+      },
+    };
+
+    const SimulationTests = {
+      'Simulation step produces valid output': () => {
+        const state = { W: 100, N: 50000, biomass: 5 };
+        const sensors = {
+          temperature: 12.5,
+          do: 8.0,
+          salinity: 33.0,
+          pH: 7.8,
+          ammonia: 0.01,
+          turbidity: 2.5,
+          flow: 1200,
+        };
+        const result = SimulationEngine.step(state, sensors);
+        TestFramework.assert(result.W >= state.W, 'Weight should not decrease');
+        TestFramework.assert(result.N <= state.N, 'Fish count should not increase');
+        TestFramework.assertRange(result.SGR, -1, 5, 'SGR should be reasonable');
+        TestFramework.assertRange(result.FCR, 0.5, 5, 'FCR should be reasonable');
+      },
+
+      'Simulation handles extreme stress': () => {
+        const state = { W: 100, N: 50000, biomass: 5 };
+        const sensors = {
+          temperature: 25, // Very hot
+          do: 3.0, // Low oxygen
+          salinity: 33.0,
+          pH: 6.5, // Low pH
+          ammonia: 0.04, // High ammonia
+          turbidity: 2.5,
+          flow: 1200,
+        };
+        const result = SimulationEngine.step(state, sensors);
+        TestFramework.assert(result.stress.total < 0.5, 'Total stress should be high (low value)');
+        TestFramework.assert(result.mu_daily > 0.001, 'Mortality should be elevated');
+      },
+    };
+
+    const StateManagerTests = {
+      'Get state returns immutable copy': () => {
+        const state1 = StateManager.getState();
+        const state2 = StateManager.getState();
+        TestFramework.assert(state1 !== state2, 'Should return different object instances');
+      },
+
+      'Update state changes value': () => {
+        const oldDay = StateManager.getState().simulation.day;
+        StateManager.updateState('simulation.day', oldDay + 1);
+        const newDay = StateManager.getState().simulation.day;
+        TestFramework.assertEqual(newDay, oldDay + 1, 'Day should be incremented');
+      },
+
+      'Subscribe to state changes': () => {
+        let called = false;
+        const unsubscribe = StateManager.subscribe((path, value) => {
+          if (path === 'simulation.speed') called = true;
+        });
+        StateManager.updateState('simulation.speed', 5);
+        unsubscribe();
+        TestFramework.assert(called, 'Listener should be called on state change');
+      },
+    };
+
+    /* ═══════════════════════════════════════════════════════════════
+       TEST RUNNER
+       ═══════════════════════════════════════════════════════════════ */
+
+    function runAllTests() {
+      TestFramework.clear();
+      
+      console.log('🧪 Running all tests...');
+      
+      TestFramework.suite('Math Models', MathModelTests);
+      TestFramework.suite('Utils', UtilsTests);
+      TestFramework.suite('Validator', ValidatorTests);
+      TestFramework.suite('Simulation', SimulationTests);
+      TestFramework.suite('State Manager', StateManagerTests);
+      
+      displayResults();
+      updateSummary();
+      
+      console.log('✅ Tests complete');
+    }
+
+    function displayResults() {
+      const container = document.getElementById('testResults');
+      container.innerHTML = '';
+      
+      const suites = {};
+      TestFramework.results.forEach(result => {
+        const [suiteName, testName] = result.name.split(': ');
+        if (!suites[suiteName]) suites[suiteName] = [];
+        suites[suiteName].push({ ...result, testName });
+      });
+      
+      for (const [suiteName, tests] of Object.entries(suites)) {
+        const suiteDiv = document.createElement('div');
+        suiteDiv.className = 'test-suite';
+        suiteDiv.innerHTML = `<h2>${suiteName}</h2>`;
+        
+        tests.forEach(test => {
+          const testDiv = document.createElement('div');
+          testDiv.className = `test-case ${test.status}`;
+          testDiv.innerHTML = `
+            <span class="test-name">${test.testName}</span>
+            <span class="test-status ${test.status}">${test.status.toUpperCase()}</span>
+          `;
+          if (test.error) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'test-error';
+            errorDiv.textContent = test.error;
+            testDiv.appendChild(errorDiv);
+          }
+          suiteDiv.appendChild(testDiv);
+        });
+        
+        container.appendChild(suiteDiv);
+      }
+    }
+
+    function updateSummary() {
+      const summary = TestFramework.getSummary();
+      document.getElementById('totalTests').textContent = summary.total;
+      document.getElementById('passedTests').textContent = summary.passed;
+      document.getElementById('failedTests').textContent = summary.failed;
+      document.getElementById('successRate').textContent = summary.successRate + '%';
+    }
+
+    function clearResults() {
+      TestFramework.clear();
+      document.getElementById('testResults').innerHTML = '';
+      updateSummary();
+    }
+
+    function exportResults() {
+      const summary = TestFramework.getSummary();
+      const data = {
+        timestamp: new Date().toISOString(),
+        summary,
+        results: TestFramework.results,
+      };
+      
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `test-results-${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // Auto-run tests on load
+    window.addEventListener('load', () => {
+      setTimeout(runAllTests, 500);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OceanoTech · Gemelo Digital · Salmo salar</title>
+<link rel="icon" href="../assets/imagenes/favicon/favicon.ico">
+
+<link rel="apple-touch-icon" href="../assets/imagenes/favicon/favicon.ico">
+
+<meta name="theme-color" content="#0F8C82">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#020810;--bg1:#05101e;--bg2:#081828;--bg3:#0b1f36;
+  --surf:rgba(6,14,30,0.94);--surf2:rgba(8,18,38,0.97);
+  --line:rgba(0,175,210,0.13);--lineh:rgba(0,210,230,0.28);
+  --text:#dff0ff;--text2:#7aadc8;--muted:#3b5f7a;
+  --br:#00c8d8;--bl:#1070ff;--gr:#00d97e;--yw:#f0a500;--rd:#ff4044;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;font-family:var(--sans);color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+.ambient{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.orb{position:absolute;border-radius:50%;filter:blur(130px);opacity:.28;}
+.orb-a{width:700px;height:700px;top:-250px;left:-150px;background:radial-gradient(circle,rgba(0,110,200,.55),transparent 70%);animation:dA 22s ease-in-out infinite alternate;}
+.orb-b{width:550px;height:550px;bottom:-120px;right:-80px;background:radial-gradient(circle,rgba(0,70,190,.45),transparent 70%);animation:dB 28s ease-in-out infinite alternate;}
+@keyframes dA{to{transform:translate(55px,38px)}}@keyframes dB{to{transform:translate(-38px,-28px)}}
+.gbg{position:absolute;inset:0;background-image:linear-gradient(rgba(0,195,220,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,195,220,.035) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse 85% 75% at 50% 30%,black 30%,transparent 100%);}
+.wrap{position:relative;z-index:1;max-width:1480px;margin:0 auto;padding:0 .75rem;}
+
+/* ── HEADER ── */
+.hdr{border-bottom:2px solid var(--br);background:rgba(2,6,14,.93);backdrop-filter:blur(20px);position:sticky;top:0;z-index:200;padding:.55rem .9rem;display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;}
+.hdr-logo{display:flex;align-items:center;gap:.65rem;flex-shrink:0;}
+.hdr-logo img{height:42px;width:auto;object-fit:contain;border-radius:6px;}
+.logo-svg-fb{display:none;width:40px;height:40px;}
+.hdr-brand strong{font-size:.88rem;font-weight:700;display:block;line-height:1.1;color:var(--text);}
+.hdr-brand small{font-family:var(--mono);font-size:.56rem;letter-spacing:.2em;color:var(--br);font-weight:600;}
+.hdr-title{flex:1;min-width:160px;}
+.hdr-title h1{font-size:.92rem;font-weight:600;}
+.hdr-title p{font-family:var(--mono);font-size:.6rem;color:var(--br);letter-spacing:.1em;text-transform:uppercase;margin-top:.15rem;}
+.hdr-sep{width:1px;height:34px;background:var(--lineh);flex-shrink:0;}
+.hdr-kpis{display:flex;gap:.9rem;flex-wrap:wrap;}
+.kpi{text-align:center;min-width:52px;}
+.kpi-l{font-family:var(--mono);font-size:.56rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;}
+.kpi-v{font-family:var(--mono);font-size:1rem;font-weight:600;color:var(--br);line-height:1.2;}
+.kpi-u{font-size:.58rem;color:var(--text2);margin-left:.1rem;}
+.ctrl{display:flex;align-items:center;gap:.4rem;flex-shrink:0;}
+.cb{font-family:var(--mono);font-size:.62rem;font-weight:600;letter-spacing:.08em;padding:.3rem .6rem;border-radius:5px;border:1px solid var(--lineh);background:transparent;color:var(--text2);cursor:pointer;transition:all .16s;}
+.cb:hover{border-color:var(--br);color:var(--br);}
+.cb.on{background:var(--br);color:#020c14;border-color:var(--br);}
+.cb.pause-btn{border-color:var(--yw);color:var(--yw);}
+.cb.pause-btn.on{background:var(--yw);color:#0a0500;}
+.day-pill{font-family:var(--mono);font-size:.68rem;padding:.28rem .65rem;border-radius:5px;border:1px solid var(--lineh);background:rgba(0,200,220,.06);color:var(--br);letter-spacing:.06em;}
+.sdot{width:7px;height:7px;border-radius:50%;background:var(--gr);box-shadow:0 0 7px var(--gr);animation:pulse 2s infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── MAIN GRID ── */
+.mgrid{display:grid;grid-template-columns:310px 1fr 290px;gap:.75rem;padding:.75rem;}
+
+/* ── PANELS ── */
+.pnl{border:1px solid var(--lineh);border-radius:11px;background:var(--surf);backdrop-filter:blur(10px);overflow:hidden;}
+.phd{border-bottom:1px solid var(--line);padding:.58rem .9rem;display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.22);}
+.phd-t{font-family:var(--mono);font-size:.62rem;font-weight:600;letter-spacing:.13em;color:var(--br);text-transform:uppercase;}
+.phd-r{font-family:var(--mono);font-size:.56rem;color:var(--text2);}
+.pb{padding:.8rem .9rem;}
+
+/* ── TANK ── */
+#tankCanvas{display:block;width:100%;background:#020810;}
+.tank-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--lineh);border-top:1px solid var(--lineh);}
+.ts{background:var(--bg2);padding:.5rem .75rem;}
+.ts-l{font-family:var(--mono);font-size:.55rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;}
+.ts-v{font-family:var(--mono);font-size:.9rem;font-weight:600;color:var(--text);margin-top:.12rem;}
+.ts-v small{font-size:.58rem;color:var(--text2);margin-left:.1rem;}
+.behavior-badge{display:flex;align-items:center;gap:.5rem;padding:.55rem .9rem;border-top:1px solid var(--line);background:rgba(0,0,0,.18);}
+.beh-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;animation:pulse 2s infinite;}
+.beh-label{font-family:var(--mono);font-size:.62rem;font-weight:600;letter-spacing:.06em;}
+.beh-phi{font-family:var(--mono);font-size:.56rem;color:var(--muted);margin-left:auto;}
+
+/* ── STRESS BARS ── */
+.sbars{display:flex;flex-direction:column;gap:.48rem;}
+.sb{display:grid;grid-template-columns:62px 1fr 38px;align-items:center;gap:.45rem;}
+.sb-l{font-family:var(--mono);font-size:.58rem;color:var(--text2);letter-spacing:.05em;}
+.sb-trk{height:5px;border-radius:3px;background:rgba(0,200,220,.09);border:1px solid var(--line);overflow:hidden;}
+.sb-fill{height:100%;border-radius:3px;transition:width .55s ease, background .5s ease;}
+.sb-v{font-family:var(--mono);font-size:.58rem;font-weight:600;text-align:right;}
+
+/* ── CHARTS ── */
+#bioChart{display:block;width:100%;height:215px;}
+#sgrChart{display:block;width:100%;height:105px;}
+.c-legend{display:flex;gap:.85rem;padding:.45rem .9rem;border-top:1px solid var(--line);background:rgba(0,0,0,.14);}
+.cleg{display:flex;align-items:center;gap:.35rem;font-family:var(--mono);font-size:.58rem;color:var(--text2);}
+.cleg-d{width:10px;height:3px;border-radius:2px;}
+
+/* ── HARVEST ── */
+.hvgrid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;padding:.8rem .9rem;}
+.hv{text-align:center;}
+.hv-l{font-family:var(--mono);font-size:.55rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
+.hv-v{font-family:var(--mono);font-size:1.05rem;font-weight:600;color:var(--br);margin-top:.18rem;}
+.hv-s{font-size:.62rem;color:var(--text2);margin-top:.08rem;}
+.hvbar-wrap{padding:0 .9rem .8rem;}
+.hvbar-trk{height:7px;border-radius:4px;background:rgba(0,200,220,.09);border:1px solid var(--lineh);overflow:hidden;}
+.hvbar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--br),var(--bl));transition:width .65s ease;}
+.hvbar-lbl{font-family:var(--mono);font-size:.56rem;color:var(--text2);margin-top:.35rem;display:flex;justify-content:space-between;}
+
+/* ── SENSORS ── */
+.sens-list{display:flex;flex-direction:column;gap:.55rem;padding:.8rem .9rem;}
+.sc{border:1px solid var(--line);border-radius:7px;padding:.55rem .7rem;background:rgba(3,10,24,.65);}
+.sc-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.32rem;}
+.sc-name{font-family:var(--mono);font-size:.58rem;letter-spacing:.09em;color:var(--text2);text-transform:uppercase;}
+.sc-val{font-family:var(--mono);font-size:.9rem;font-weight:600;}
+.sc-unit{font-size:.58rem;color:var(--text2);margin-left:.1rem;}
+.sc-status{font-family:var(--mono);font-size:.52rem;font-weight:600;letter-spacing:.07em;padding:.1rem .38rem;border-radius:3px;margin-left:.25rem;}
+.s-ok{background:rgba(0,217,126,.14);color:var(--gr);}
+.s-warn{background:rgba(240,165,0,.14);color:var(--yw);}
+.s-err{background:rgba(255,64,68,.14);color:var(--rd);}
+.gauge-trk{height:4px;border-radius:2px;background:rgba(0,200,220,.07);overflow:hidden;}
+.gauge-fill{height:100%;border-radius:2px;transition:width .4s ease,background .4s ease;}
+
+/* ── SCENARIOS ── */
+.sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:.45rem;padding:.8rem .9rem;}
+.scbtn{font-family:var(--mono);font-size:.58rem;font-weight:600;letter-spacing:.04em;padding:.48rem .55rem;border-radius:7px;border:1px solid var(--line);background:rgba(3,10,24,.7);color:var(--text2);cursor:pointer;text-align:left;transition:all .2s;display:flex;flex-direction:column;gap:.15rem;}
+.scbtn:hover{border-color:var(--lineh);color:var(--text);background:rgba(0,200,220,.07);}
+.scbtn.on{border-color:var(--yw);background:rgba(240,165,0,.1);color:var(--yw);}
+.scbtn.reset{border-color:var(--gr);color:var(--gr);}
+.scbtn.reset:hover,.scbtn.reset.on{background:rgba(0,217,126,.09);}
+.sc-ico{font-size:.95rem;}
+.sc-sub{font-size:.5rem;opacity:.65;font-weight:400;letter-spacing:.03em;}
+
+/* ── ALERTS ── */
+.alog{max-height:150px;overflow-y:auto;}
+.ai{display:flex;align-items:center;gap:.55rem;padding:.42rem .9rem;border-bottom:1px solid rgba(0,175,210,.07);font-family:var(--mono);font-size:.6rem;}
+.ai:last-child{border-bottom:none;}
+.ai-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.a-ok{background:var(--gr);}
+.a-warn{background:var(--yw);}
+.a-err{background:var(--rd);}
+.ai-time{color:var(--muted);margin-left:auto;white-space:nowrap;}
+
+/* ── MATH PANEL ── */
+.math-panel{margin:.25rem .75rem .75rem;border:1px solid var(--lineh);border-radius:11px;background:var(--surf);overflow:hidden;}
+.mp-hd{padding:.65rem 1.1rem;border-bottom:1px solid var(--line);background:rgba(0,0,0,.22);display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;}
+.mp-hd h2{font-size:.78rem;font-weight:600;color:var(--text);}
+.mp-hd span{font-family:var(--mono);font-size:.58rem;color:var(--br);opacity:.75;}
+.eq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));}
+.eq{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:.9rem 1.1rem;}
+.eq:last-child{border-right:none;}
+.eq-name{font-family:var(--mono);font-size:.56rem;font-weight:600;letter-spacing:.12em;color:var(--br);text-transform:uppercase;margin-bottom:.45rem;}
+.eq-form{font-family:var(--mono);font-size:.63rem;color:var(--text2);line-height:1.65;background:rgba(0,200,220,.04);border-radius:4px;padding:.45rem .55rem;border:1px solid var(--line);word-break:break-all;}
+.eq-live{font-family:var(--mono);font-size:.62rem;color:var(--text);margin-top:.4rem;padding:.28rem .45rem;border-radius:3px;border-left:2px solid var(--br);background:rgba(0,200,220,.05);}
+.eq-r{color:var(--br);font-weight:600;}
+
+/* ── FOOTER ── */
+.ft{text-align:center;font-family:var(--mono);font-size:.58rem;color:var(--muted);padding:.7rem 1rem;border-top:1px solid var(--line);letter-spacing:.07em;position:relative;z-index:1;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1120px){.mgrid{grid-template-columns:1fr 1fr;}.left-col{grid-column:1/3;}.center-col,.right-col{grid-column:span 1;}}
+@media(max-width:700px){.mgrid{grid-template-columns:1fr;}.left-col,.center-col,.right-col{grid-column:1;}.hdr-kpis{display:none;}}
+
+/* SPA shell: navegacion global y vistas sin recarga */
+.spa-shell{position:relative;z-index:1;display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh;}
+.global-sidebar{position:sticky;top:0;height:100vh;padding:1rem;border-right:1px solid var(--lineh);background:rgba(2,8,16,.96);backdrop-filter:blur(18px);display:flex;flex-direction:column;gap:1rem;}
+.global-brand{display:flex;align-items:center;gap:.7rem;padding:.35rem .2rem .9rem;border-bottom:1px solid var(--line);}
+.global-brand-mark{width:14px;height:14px;border-radius:4px;background:linear-gradient(135deg,var(--br),var(--gr));box-shadow:0 0 16px rgba(0,200,216,.55);}
+.global-brand strong{display:block;font-size:.95rem;}
+.global-brand small{display:block;margin-top:.12rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.11em;color:var(--text2);text-transform:uppercase;}
+.global-nav{display:grid;gap:.45rem;}
+.global-nav-link{display:block;text-decoration:none;color:var(--text2);font-family:var(--mono);font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--line);border-radius:7px;padding:.72rem .78rem;background:rgba(3,10,24,.72);transition:background .16s,border-color .16s,color .16s;}
+.global-nav-link:hover,.global-nav-link.active{color:#031015;background:var(--br);border-color:var(--br);}
+.global-state-card{margin-top:auto;border:1px solid var(--line);border-radius:8px;padding:.75rem;background:rgba(3,10,24,.72);}
+.global-state-card span,.global-state-card small{display:block;font-family:var(--mono);font-size:.58rem;color:var(--text2);}
+.global-state-card strong{display:block;margin:.28rem 0;font-family:var(--mono);font-size:.72rem;color:var(--gr);}
+.spa-main{min-width:0;}
+.spa-view{display:none;min-height:100vh;}
+.spa-view.active{display:block;}
+.captacion-view{padding:1rem .9rem 1.25rem;}
+.captacion-view .header{display:flex;justify-content:space-between;gap:1rem;align-items:center;margin-bottom:1rem;border:1px solid var(--lineh);border-radius:8px;background:var(--surf);padding:1rem;}
+.captacion-view .header h2{margin:0;font-size:1.16rem;}
+.captacion-view .header p{margin:.25rem 0 0;color:var(--text2);}
+.captacion-view .header-actions{display:flex;gap:.5rem;flex-wrap:wrap;}
+.captacion-view button,.captacion-view select{background:rgba(3,10,24,.78);color:var(--text);border:1px solid var(--lineh);border-radius:6px;padding:.52rem .72rem;}
+.captacion-view .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.75rem;margin-bottom:.75rem;}
+.captacion-view .kpi,.captacion-view .panel{background:var(--surf);border:1px solid var(--lineh);border-radius:8px;padding:.8rem;}
+.captacion-view .kpi h4{margin:0;color:var(--text2);font-size:.82rem;font-weight:500;}
+.captacion-view .kpi .value{margin-top:.35rem;font-family:var(--mono);font-size:1.35rem;font-weight:700;color:var(--br);}
+.captacion-view .kpi .trend{margin-top:.2rem;font-size:.78rem;color:var(--text2);}
+.captacion-view .grid.two{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,1fr);gap:.75rem;margin-bottom:.75rem;}
+.captacion-view .panel h3{margin:0 0 .55rem;font-size:.96rem;}
+.captacion-view .sub{color:var(--text2);margin-top:0;}
+.captacion-view .panel-title-row,.captacion-view .predictive-meta{display:flex;justify-content:space-between;align-items:center;gap:.75rem;}
+.captacion-view .badge{font-family:var(--mono);font-size:.68rem;padding:.2rem .48rem;border-radius:999px;}
+.captacion-view .badge.ok{background:rgba(0,217,126,.16);color:#a9f5d4;}
+.captacion-view .badge.warn{background:rgba(240,165,0,.16);color:#ffe1a6;}
+.captacion-view .badge.critical{background:rgba(255,64,68,.16);color:#ffc3c5;}
+.captacion-view .metric-list{display:grid;gap:.45rem;}
+.captacion-view .metric-item{display:flex;justify-content:space-between;gap:1rem;border-bottom:1px solid var(--line);padding-bottom:.38rem;}
+.captacion-view .simulation-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.5rem;}
+.captacion-view .sim-card{border:1px solid var(--line);background:rgba(3,10,24,.58);border-radius:7px;padding:.58rem;}
+.captacion-view .sim-card strong{display:block;margin:.22rem 0;font-family:var(--mono);font-size:1.08rem;color:var(--br);}
+.captacion-view .interop-list{margin:0;padding-left:1rem;color:var(--text2);}
+.captacion-view table{width:100%;border-collapse:collapse;}
+.captacion-view th,.captacion-view td{text-align:left;padding:.48rem .35rem;font-size:.86rem;border-bottom:1px solid var(--line);}
+.captacion-view thead{color:var(--text2);}
+.captacion-view .state{padding:.18rem .44rem;border-radius:999px;font-family:var(--mono);font-size:.7rem;}
+.captacion-view .state.green{background:rgba(0,217,126,.16);color:#a9f5d4;}
+.captacion-view .state.yellow{background:rgba(240,165,0,.16);color:#ffe1a6;}
+.captacion-view .state.red{background:rgba(255,64,68,.16);color:#ffc3c5;}
+@media(max-width:1080px){.spa-shell{grid-template-columns:1fr}.global-sidebar{position:relative;height:auto}.global-nav{grid-template-columns:1fr 1fr}.captacion-view .grid.two{grid-template-columns:1fr}}
+@media(max-width:700px){.global-nav{grid-template-columns:1fr}.captacion-view .header{align-items:flex-start;flex-direction:column}.captacion-view{padding:.75rem}.captacion-view th,.captacion-view td{font-size:.78rem}}
+
+/* ── USER CARD ── */
+.user-card{border-top:1px solid var(--line);padding:.65rem .2rem 0;display:flex;align-items:center;justify-content:space-between;gap:.5rem;}
+.user-name{font-family:var(--mono);font-size:.6rem;color:var(--text2);word-break:break-all;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.logout-btn{font-family:var(--mono);font-size:.56rem;background:none;border:1px solid var(--line);color:var(--muted);padding:.25rem .5rem;border-radius:4px;cursor:pointer;letter-spacing:.04em;transition:all .15s;white-space:nowrap;}
+.logout-btn:hover{border-color:var(--rd);color:var(--rd);}
+
+/* ── TWIN STATUS BAR ── */
+.twin-status-bar{display:flex;align-items:center;gap:.7rem;padding:.4rem .85rem;background:rgba(2,8,20,.94);border-bottom:1px solid var(--lineh);font-family:var(--mono);font-size:.58rem;flex-wrap:wrap;position:sticky;top:0;z-index:100;backdrop-filter:blur(10px);}
+.tsb-mode{font-weight:700;letter-spacing:.1em;padding:.18rem .5rem;border-radius:3px;}
+.tsb-mode.simulation{background:rgba(112,80,255,.2);color:#c4b0ff;border:1px solid rgba(112,80,255,.4);}
+.tsb-mode.live{background:rgba(0,217,126,.18);color:#a9f5d4;border:1px solid rgba(0,217,126,.4);}
+.tsb-mode.hybrid{background:rgba(240,165,0,.18);color:#ffe1a6;border:1px solid rgba(240,165,0,.4);}
+.tsb-mode.offline{background:rgba(255,64,68,.18);color:#ffc3c5;border:1px solid rgba(255,64,68,.4);}
+.tsb-sep{width:1px;height:12px;background:var(--line);flex-shrink:0;}
+.tsb-item{color:var(--text2);}
+.tsb-item b{color:var(--br);}
+.tsb-pulsedot{width:6px;height:6px;border-radius:50%;background:var(--gr);box-shadow:0 0 5px var(--gr);animation:pulse 2s infinite;flex-shrink:0;}
+
+/* ── CAPTACIÓN HUB EXTRAS ── */
+.cap-hub-section{margin-top:.75rem;}
+.cap-hub-section-title{font-family:var(--mono);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--br);margin-bottom:.5rem;padding:.35rem 0;border-bottom:1px solid var(--line);}
+.source-cards-wrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.55rem;}
+.source-card{border:1px solid var(--line);border-radius:7px;padding:.62rem .75rem;background:rgba(3,10,24,.65);}
+.source-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.35rem;}
+.source-card-id{font-family:var(--mono);font-size:.56rem;color:var(--muted);letter-spacing:.07em;}
+.source-card-name{font-size:.85rem;font-weight:600;color:var(--text);}
+.source-card-meta{font-family:var(--mono);font-size:.6rem;color:var(--text2);margin-bottom:.28rem;}
+.source-card-value{font-family:var(--mono);font-size:1.05rem;font-weight:700;color:var(--br);}
+.source-badge{font-family:var(--mono);font-size:.56rem;font-weight:700;padding:.12rem .38rem;border-radius:3px;}
+.source-badge.live{background:rgba(0,217,126,.18);color:#a9f5d4;}
+.source-badge.sim{background:rgba(112,80,255,.18);color:#c4b0ff;}
+.source-badge.offline{background:rgba(255,64,68,.18);color:#ffc3c5;}
+.connectivity-grid{display:grid;grid-template-columns:1fr 1fr;gap:.4rem;margin-top:.35rem;}
+.conn-item{display:flex;justify-content:space-between;align-items:center;padding:.35rem .5rem;border:1px solid var(--line);border-radius:5px;background:rgba(3,10,24,.55);}
+.conn-label{font-family:var(--mono);font-size:.62rem;color:var(--text2);}
+.conn-status{font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.04em;}
+.conn-status.ok{color:var(--gr);}
+.conn-status.warn{color:var(--yw);}
+.conn-status.err{color:var(--rd);}
+.dq-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem;}
+.dq-label{font-family:var(--mono);font-size:.6rem;color:var(--text2);width:72px;flex-shrink:0;}
+.dq-trk{flex:1;height:5px;border-radius:3px;background:rgba(0,200,220,.09);overflow:hidden;}
+.dq-fill{height:100%;border-radius:3px;transition:width .5s;}
+.dq-val{font-family:var(--mono);font-size:.58rem;color:var(--br);width:34px;text-align:right;flex-shrink:0;}
+.dq-score-big{font-family:var(--mono);font-size:1.8rem;font-weight:700;color:var(--gr);}
+.dq-score-label{font-family:var(--mono);font-size:.58rem;color:var(--text2);margin-top:.1rem;}
+.btn-add-source{font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.05em;background:rgba(0,200,216,.1);border:1px solid rgba(0,200,216,.3);color:var(--br);padding:.42rem .85rem;border-radius:5px;cursor:pointer;transition:all .18s;}
+.btn-add-source:hover{background:rgba(0,200,216,.2);border-color:var(--br);}
+.sensor-reg-table{width:100%;border-collapse:collapse;}
+.sensor-reg-table th,.sensor-reg-table td{text-align:left;padding:.4rem .45rem;font-size:.78rem;border-bottom:1px solid var(--line);}
+.sensor-reg-table thead{font-family:var(--mono);font-size:.62rem;letter-spacing:.05em;color:var(--text2);}
+.sensor-reg-table tbody tr:hover{background:rgba(0,200,220,.04);}
+</style>
+</head>
+<body>
+<div class="spa-shell" data-spa-shell="oceano-twin">
+  <aside class="global-sidebar" aria-label="Navegacion principal del gemelo digital">
+    <div class="global-brand">
+      <span class="global-brand-mark"></span>
+      <div>
+        <strong>OceanoTech</strong>
+        <small>AquaTwins v2.0</small>
+      </div>
+    </div>
+    <nav class="global-nav">
+      <a class="global-nav-link" href="#captacion" data-route-link="captacion">Captacion &amp; Data Hub</a>
+      <a class="global-nav-link" href="#gemelo" data-route-link="gemelo">Gemelo Digital</a>
+    </nav>
+    <div class="global-state-card">
+      <span>Modo del gemelo</span>
+      <strong id="globalStateStatus" style="color:var(--br)">SIMULATION</strong>
+      <small id="globalStateTimestamp">Iniciando…</small>
+      <small id="globalDataQuality" style="margin-top:.25rem;">Calidad datos: <b style="color:var(--gr)">—</b></small>
+    </div>
+    <div class="user-card">
+      <span class="user-name" id="sidebarUserName">—</span>
+      <button class="logout-btn" onclick="doLogout()">Salir</button>
+    </div>
+  </aside>
+  <main class="spa-main" id="spaMain">
+    <section id="view-captacion" class="spa-view" data-route-view="captacion" aria-labelledby="captacionTitle">
+      <div class="captacion-view">
+
+        <!-- TWIN STATUS BAR -->
+        <div class="twin-status-bar" id="twinStatusBar">
+          <span class="tsb-pulsedot" id="tsbPulseDot"></span>
+          <span class="tsb-mode simulation" id="tsbMode">SIMULATION</span>
+          <span class="tsb-sep"></span>
+          <span class="tsb-item">Última sincronización: <b id="tsbLastSync">—</b></span>
+          <span class="tsb-sep"></span>
+          <span class="tsb-item quality">Calidad de datos: <b id="tsbQuality">94.7%</b></span>
+          <span class="tsb-sep"></span>
+          <span class="tsb-item confidence">Confianza del gemelo: <b id="tsbConfidence">91.8%</b></span>
+          <span class="tsb-sep"></span>
+          <span class="tsb-item">Twin ID: <b id="tsbTwinId">DT-SITE01-CAGE07</b></span>
+        </div>
+
+        <header class="header">
+          <div>
+            <h2 id="captacionTitle">Captación &amp; Data Hub</h2>
+            <p>Centro de adquisición, control de calidad y sincronización de datos del gemelo digital.</p>
+          </div>
+          <div class="header-actions">
+            <select id="capHorizon">
+              <option value="6">Horizonte: 6h</option>
+              <option value="12">Horizonte: 12h</option>
+              <option value="24">Horizonte: 24h</option>
+              <option value="48">Horizonte: 48h</option>
+            </select>
+            <button id="capRefresh">Actualizar</button>
+            <button class="btn-add-source" onclick="showAddSourceModal()">+ Agregar fuente</button>
+          </div>
+        </header>
+
+        <!-- KPI GRID -->
+        <section class="kpi-grid" id="capKpiGrid"></section>
+
+        <!-- FUENTES DE DATOS -->
+        <div class="cap-hub-section">
+          <div class="cap-hub-section-title">01 — Fuentes de datos activas</div>
+          <div class="source-cards-wrap" id="sourceCardsWrap"></div>
+        </div>
+
+        <!-- AGUA + CONECTIVIDAD -->
+        <section class="grid two" style="margin-top:.75rem;">
+          <article class="panel">
+            <div class="panel-title-row">
+              <h3>Calidad de Agua — Tiempo Real</h3>
+              <span id="capWaterBadge" class="badge ok">Estable</span>
+            </div>
+            <div class="metric-list" id="capWaterMetrics"></div>
+          </article>
+
+          <article class="panel">
+            <h3>Conectividad</h3>
+            <div class="connectivity-grid" id="connectivityGrid"></div>
+          </article>
+        </section>
+
+        <!-- REGISTRO DE SENSORES + CALIDAD DE DATOS -->
+        <section class="grid two" style="margin-top:.75rem;">
+          <article class="panel">
+            <div class="panel-title-row">
+              <h3>Registro de Sensores</h3>
+              <span class="badge ok" id="sensorRegistryBadge">7 activos</span>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="sensor-reg-table">
+                <thead><tr><th>ID</th><th>Parámetro</th><th>Valor</th><th>Unidad</th><th>Estado</th><th>Calidad</th></tr></thead>
+                <tbody id="sensorRegistryBody"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.65rem;">
+              <h3 style="margin:0;">Calidad de Datos</h3>
+              <div style="text-align:right;">
+                <div class="dq-score-big" id="dqScoreBig">94.7%</div>
+                <div class="dq-score-label">Score global</div>
+              </div>
+            </div>
+            <div id="dqBarsContainer"></div>
+          </article>
+        </section>
+
+        <!-- PREDICTIVO + ALERTAS -->
+        <section class="grid two" style="margin-top:.75rem;">
+          <article class="panel">
+            <h3>Análisis Predictivo</h3>
+            <canvas id="capPredictiveChart" height="160"></canvas>
+            <div class="predictive-meta">
+              <span>Precisión esperada:</span>
+              <strong id="capAccuracy">—</strong>
+            </div>
+          </article>
+
+          <article class="panel">
+            <h3>Alertas Operativas</h3>
+            <table>
+              <thead>
+                <tr><th>Estado</th><th>Jaula</th><th>Evento</th><th>Acción</th></tr>
+              </thead>
+              <tbody id="capAlertsBody"></tbody>
+            </table>
+          </article>
+        </section>
+
+        <!-- INTEROPERABILIDAD -->
+        <section class="panel" style="margin-top:.75rem;">
+          <div class="panel-title-row" style="margin-bottom:.55rem;">
+            <h3>Interoperabilidad del Ecosistema</h3>
+            <span class="badge ok">Fase 1</span>
+          </div>
+          <ul id="capInteropList" class="interop-list"></ul>
+        </section>
+
+      </div>
+    </section>
+    <section id="view-gemelo" class="spa-view" data-route-view="gemelo" aria-labelledby="gemeloTitle">
+<div class="ambient"><div class="orb orb-a"></div><div class="orb orb-b"></div><div class="gbg"></div></div>
+
+<!-- ═══ HEADER ═══ -->
+<header class="hdr">
+  <div class="hdr-logo">
+    <img id="logoImg"
+         src="https://drive.google.com/uc?export=view&id=1brVlZ4_K6AvzBrIJ_4zIsMToE0P3oRlC"
+         alt="OceanoTech Innova"
+         crossorigin="anonymous"
+         onerror="this.style.display='none';document.getElementById('logoFb').style.display='block';">
+    <svg id="logoFb" style="display:none;" class="logo-svg-fb" viewBox="0 0 320 320">
+      <defs>
+        <style>
+          .hex-stroke { fill: none; stroke: #4A9B9F; stroke-width: 8; stroke-linejoin: miter; }
+          .wave-stroke { fill: none; stroke: #4A9B9F; stroke-width: 7; stroke-linecap: round; }
+        
+/* SPA shell: navegacion global y vistas sin recarga */
+.spa-shell{position:relative;z-index:1;display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh;}
+.global-sidebar{position:sticky;top:0;height:100vh;padding:1rem;border-right:1px solid var(--lineh);background:rgba(2,8,16,.96);backdrop-filter:blur(18px);display:flex;flex-direction:column;gap:1rem;}
+.global-brand{display:flex;align-items:center;gap:.7rem;padding:.35rem .2rem .9rem;border-bottom:1px solid var(--line);}
+.global-brand-mark{width:14px;height:14px;border-radius:4px;background:linear-gradient(135deg,var(--br),var(--gr));box-shadow:0 0 16px rgba(0,200,216,.55);}
+.global-brand strong{display:block;font-size:.95rem;}
+.global-brand small{display:block;margin-top:.12rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.11em;color:var(--text2);text-transform:uppercase;}
+.global-nav{display:grid;gap:.45rem;}
+.global-nav-link{display:block;text-decoration:none;color:var(--text2);font-family:var(--mono);font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--line);border-radius:7px;padding:.72rem .78rem;background:rgba(3,10,24,.72);transition:background .16s,border-color .16s,color .16s;}
+.global-nav-link:hover,.global-nav-link.active{color:#031015;background:var(--br);border-color:var(--br);}
+.global-state-card{margin-top:auto;border:1px solid var(--line);border-radius:8px;padding:.75rem;background:rgba(3,10,24,.72);}
+.global-state-card span,.global-state-card small{display:block;font-family:var(--mono);font-size:.58rem;color:var(--text2);}
+.global-state-card strong{display:block;margin:.28rem 0;font-family:var(--mono);font-size:.72rem;color:var(--gr);}
+.spa-main{min-width:0;}
+.spa-view{display:none;min-height:100vh;}
+.spa-view.active{display:block;}
+.captacion-view{padding:1rem .9rem 1.25rem;}
+.captacion-view .header{display:flex;justify-content:space-between;gap:1rem;align-items:center;margin-bottom:1rem;border:1px solid var(--lineh);border-radius:8px;background:var(--surf);padding:1rem;}
+.captacion-view .header h2{margin:0;font-size:1.16rem;}
+.captacion-view .header p{margin:.25rem 0 0;color:var(--text2);}
+.captacion-view .header-actions{display:flex;gap:.5rem;flex-wrap:wrap;}
+.captacion-view button,.captacion-view select{background:rgba(3,10,24,.78);color:var(--text);border:1px solid var(--lineh);border-radius:6px;padding:.52rem .72rem;}
+.captacion-view .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.75rem;margin-bottom:.75rem;}
+.captacion-view .kpi,.captacion-view .panel{background:var(--surf);border:1px solid var(--lineh);border-radius:8px;padding:.8rem;}
+.captacion-view .kpi h4{margin:0;color:var(--text2);font-size:.82rem;font-weight:500;}
+.captacion-view .kpi .value{margin-top:.35rem;font-family:var(--mono);font-size:1.35rem;font-weight:700;color:var(--br);}
+.captacion-view .kpi .trend{margin-top:.2rem;font-size:.78rem;color:var(--text2);}
+.captacion-view .grid.two{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,1fr);gap:.75rem;margin-bottom:.75rem;}
+.captacion-view .panel h3{margin:0 0 .55rem;font-size:.96rem;}
+.captacion-view .sub{color:var(--text2);margin-top:0;}
+.captacion-view .panel-title-row,.captacion-view .predictive-meta{display:flex;justify-content:space-between;align-items:center;gap:.75rem;}
+.captacion-view .badge{font-family:var(--mono);font-size:.68rem;padding:.2rem .48rem;border-radius:999px;}
+.captacion-view .badge.ok{background:rgba(0,217,126,.16);color:#a9f5d4;}
+.captacion-view .badge.warn{background:rgba(240,165,0,.16);color:#ffe1a6;}
+.captacion-view .badge.critical{background:rgba(255,64,68,.16);color:#ffc3c5;}
+.captacion-view .metric-list{display:grid;gap:.45rem;}
+.captacion-view .metric-item{display:flex;justify-content:space-between;gap:1rem;border-bottom:1px solid var(--line);padding-bottom:.38rem;}
+.captacion-view .simulation-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.5rem;}
+.captacion-view .sim-card{border:1px solid var(--line);background:rgba(3,10,24,.58);border-radius:7px;padding:.58rem;}
+.captacion-view .sim-card strong{display:block;margin:.22rem 0;font-family:var(--mono);font-size:1.08rem;color:var(--br);}
+.captacion-view .interop-list{margin:0;padding-left:1rem;color:var(--text2);}
+.captacion-view table{width:100%;border-collapse:collapse;}
+.captacion-view th,.captacion-view td{text-align:left;padding:.48rem .35rem;font-size:.86rem;border-bottom:1px solid var(--line);}
+.captacion-view thead{color:var(--text2);}
+.captacion-view .state{padding:.18rem .44rem;border-radius:999px;font-family:var(--mono);font-size:.7rem;}
+.captacion-view .state.green{background:rgba(0,217,126,.16);color:#a9f5d4;}
+.captacion-view .state.yellow{background:rgba(240,165,0,.16);color:#ffe1a6;}
+.captacion-view .state.red{background:rgba(255,64,68,.16);color:#ffc3c5;}
+@media(max-width:1080px){.spa-shell{grid-template-columns:1fr}.global-sidebar{position:relative;height:auto}.global-nav{grid-template-columns:1fr 1fr}.captacion-view .grid.two{grid-template-columns:1fr}}
+@media(max-width:700px){.global-nav{grid-template-columns:1fr}.captacion-view .header{align-items:flex-start;flex-direction:column}.captacion-view{padding:.75rem}.captacion-view th,.captacion-view td{font-size:.78rem}}
+</style>
+      </defs>
+      <!-- Outer hexagon -->
+      <polygon class="hex-stroke" points="160,30 270,90 270,210 160,270 50,210 50,90"/>
+      <!-- Second hexagon -->
+      <polygon class="hex-stroke" points="160,55 250,105 250,195 160,245 70,195 70,105"/>
+      <!-- Third hexagon -->
+      <polygon class="hex-stroke" points="160,80 230,120 230,180 160,220 90,180 90,120"/>
+      <!-- Inner hexagon -->
+      <polygon class="hex-stroke" points="160,105 210,135 210,165 160,195 110,165 110,135"/>
+      <!-- Wave lines inside -->
+      <path class="wave-stroke" d="M 130,145 Q 145,135 160,145 T 190,145"/>
+      <path class="wave-stroke" d="M 130,155 Q 145,165 160,155 T 190,155"/>
+    </svg>
+    <div class="hdr-brand"><strong>OceanoTech</strong><small>INNOVA</small></div>
+  </div>
+  <div class="hdr-sep"></div>
+  <div class="hdr-title">
+    <h1>Gemelo Digital — <em style="font-style:normal;color:var(--br)">Salmo salar</em></h1>
+    <p>Modelo TGC · Boids Salmón Atlántico · Jaula Oceánica Ø40m · 20m prof.</p>
+  </div>
+  <div class="hdr-sep"></div>
+  <div class="hdr-kpis">
+    <div class="kpi"><div class="kpi-l">Biomasa</div><div class="kpi-v" id="hBio">--<span class="kpi-u">t</span></div></div>
+    <div class="kpi"><div class="kpi-l">Peso Ind.</div><div class="kpi-v" id="hW">--<span class="kpi-u">g</span></div></div>
+    <div class="kpi"><div class="kpi-l">SGR</div><div class="kpi-v" id="hSGR">--<span class="kpi-u">%/d</span></div></div>
+    <div class="kpi"><div class="kpi-l">FCR</div><div class="kpi-v" id="hFCR">--</div></div>
+    <div class="kpi"><div class="kpi-l">Mortalidad</div><div class="kpi-v" id="hMu">--<span class="kpi-u">%/d</span></div></div>
+  </div>
+  <div class="hdr-sep"></div>
+  <div class="ctrl">
+    <div class="sdot"></div>
+    <span class="day-pill" id="dayPill">Día 0</span>
+    <button class="cb on" id="sp1"  onclick="setSpeed(1)">1×</button>
+    <button class="cb"    id="sp5"  onclick="setSpeed(5)">5×</button>
+    <button class="cb"    id="sp30" onclick="setSpeed(30)">30×</button>
+    <button class="cb pause-btn" id="pauseBtn" onclick="togglePause()">⏸ PAUSA</button>
+  </div>
+</header>
+
+<!-- ═══ MAIN GRID ═══ -->
+<div class="mgrid wrap">
+
+  <!-- LEFT: Tank + Stress -->
+  <div class="left-col" style="display:flex;flex-direction:column;gap:.75rem;">
+    <div class="pnl">
+      <div class="phd">
+        <span class="phd-t">Pontón — Vista Lateral Batimétrica</span>
+        <span class="phd-r" id="tankStatus">●&nbsp;ACTIVO</span>
+      </div>
+      <canvas id="tankCanvas" height="265"></canvas>
+      <div class="behavior-badge" id="behavBadge">
+        <div class="beh-dot" id="behavDot" style="background:var(--gr)"></div>
+        <span class="beh-label" id="behavLabel">Inicializando…</span>
+        <span class="beh-phi" id="behavPhi">Φ=--</span>
+      </div>
+      <div class="tank-stats">
+        <div class="ts"><div class="ts-l">Peces activos</div><div class="ts-v" id="tsN">--</div></div>
+        <div class="ts"><div class="ts-l">Densidad</div><div class="ts-v" id="tsDen">--<small>kg/m³</small></div></div>
+        <div class="ts"><div class="ts-l">Índice de salud</div><div class="ts-v" id="tsH">--</div></div>
+        <div class="ts"><div class="ts-l">Mortalidad acum.</div><div class="ts-v" id="tsD">--<small>peces</small></div></div>
+      </div>
+    </div>
+
+    <div class="pnl">
+      <div class="phd"><span class="phd-t">Factores de Estrés f(·)</span><span class="phd-r" id="fTotalLbl">f_total = --</span></div>
+      <div class="pb sbars">
+        <div class="sb"><span class="sb-l">f_Temp</span><div class="sb-trk"><div class="sb-fill" id="sfT"></div></div><span class="sb-v" id="sfTv">--</span></div>
+        <div class="sb"><span class="sb-l">f_O₂</span><div class="sb-trk"><div class="sb-fill" id="sfO"></div></div><span class="sb-v" id="sfOv">--</span></div>
+        <div class="sb"><span class="sb-l">f_Dens</span><div class="sb-trk"><div class="sb-fill" id="sfD"></div></div><span class="sb-v" id="sfDv">--</span></div>
+        <div class="sb"><span class="sb-l">f_NH₃</span><div class="sb-trk"><div class="sb-fill" id="sfA"></div></div><span class="sb-v" id="sfAv">--</span></div>
+        <div class="sb"><span class="sb-l">f_pH</span><div class="sb-trk"><div class="sb-fill" id="sfP"></div></div><span class="sb-v" id="sfPv">--</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER: Charts -->
+  <div class="center-col" style="display:flex;flex-direction:column;gap:.75rem;">
+    <div class="pnl">
+      <div class="phd"><span class="phd-t">Serie Temporal — Biomasa & Crecimiento</span></div>
+      <canvas id="bioChart"></canvas>
+      <div class="c-legend">
+        <div class="cleg"><div class="cleg-d" style="background:#00c8d8;height:2px;"></div>Biomasa (t)</div>
+        <div class="cleg"><div class="cleg-d" style="background:#5090ff;height:2px;"></div>Peso ind. (g)</div>
+        <div class="cleg"><div class="cleg-d" style="background:rgba(255,200,50,.55);border-top:2px dashed rgba(255,200,50,.55);height:0;"></div>Predicción TGC</div>
+      </div>
+    </div>
+
+    <div class="pnl">
+      <div class="phd"><span class="phd-t">Predicción de Cosecha</span><span class="phd-r" id="hvPct">--% objetivo</span></div>
+      <div class="hvgrid">
+        <div class="hv"><div class="hv-l">Días restantes</div><div class="hv-v" id="hvDays">--</div><div class="hv-s">a 5,000g</div></div>
+        <div class="hv"><div class="hv-l">Fecha estimada</div><div class="hv-v" id="hvDate">--</div><div class="hv-s">cosecha</div></div>
+        <div class="hv"><div class="hv-l">Biomasa cosecha</div><div class="hv-v" id="hvBio">--<span style="font-size:.6rem;color:var(--text2)"> t</span></div><div class="hv-s">proyección</div></div>
+        <div class="hv"><div class="hv-l">Alimento acum.</div><div class="hv-v" id="hvFeed">--<span style="font-size:.6rem;color:var(--text2)"> t</span></div><div class="hv-s">acumulado</div></div>
+      </div>
+      <div class="hvbar-wrap">
+        <div class="hvbar-trk"><div class="hvbar-fill" id="hvBar" style="width:0%"></div></div>
+        <div class="hvbar-lbl"><span>Smolt 80g</span><span>Objetivo 5,000g</span></div>
+      </div>
+    </div>
+
+    <div class="pnl">
+      <div class="phd"><span class="phd-t">SGR diario & FCR acumulado</span></div>
+      <canvas id="sgrChart"></canvas>
+    </div>
+  </div>
+
+  <!-- RIGHT: Sensors + Scenarios + Alerts -->
+  <div class="right-col" style="display:flex;flex-direction:column;gap:.75rem;">
+    <div class="pnl">
+      <div class="phd"><span class="phd-t">Sensores Ficticios — Tiempo Real</span></div>
+      <div class="sens-list" id="sensList"></div>
+    </div>
+
+    <div class="pnl">
+      <div class="phd"><span class="phd-t">Inyección de Escenarios</span><span class="phd-r" id="scLabel">NOMINAL</span></div>
+      <div class="sc-grid">
+        <button class="scbtn" onclick="setScenario('heatwave')"><div class="sc-ico">🌡️</div><div>Ola de Calor</div><div class="sc-sub">T→21°C · 14d</div></button>
+        <button class="scbtn" onclick="setScenario('hypoxia')"><div class="sc-ico">💧</div><div>Hipoxia</div><div class="sc-sub">DO→3.5 · 7d</div></button>
+        <button class="scbtn" onclick="setScenario('algae')"><div class="sc-ico">🌿</div><div>Bloom Algal</div><div class="sc-sub">pH↑, DO↓ · 10d</div></button>
+        <button class="scbtn" onclick="setScenario('storm')"><div class="sc-ico">🌊</div><div>Tormenta</div><div class="sc-sub">T↓, turb↑ · 3d</div></button>
+        <button class="scbtn" onclick="setScenario('ammonia')"><div class="sc-ico">☠️</div><div>Pico NH₃</div><div class="sc-sub">NH₃→0.04 · 5d</div></button>
+        <button class="scbtn" onclick="setScenario('cold')"><div class="sc-ico">🧊</div><div>Agua Fría</div><div class="sc-sub">T→6°C · 21d</div></button>
+        <button class="scbtn" onclick="setScenario('lice')"><div class="sc-ico">🦠</div><div>Piojo de Mar</div><div class="sc-sub">Estrés crónico 30d</div></button>
+        <button class="scbtn reset" onclick="setScenario('normal')"><div class="sc-ico">✅</div><div>Normalizar</div><div class="sc-sub">Condiciones óptimas</div></button>
+      </div>
+    </div>
+
+    <div class="pnl">
+      <div class="phd"><span class="phd-t">Registro de Alertas</span><span class="phd-r" id="alertCnt">0 eventos</span></div>
+      <div class="alog" id="alertLog"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MATH MODEL PANEL ═══ -->
+<div class="math-panel wrap">
+  <div class="mp-hd">
+    <h2>Modelos Matemáticos — Salmo salar — Valores en tiempo real</h2>
+    <span>TGC · Stress Functions · Boids Biológico · Mortalidad · FCR</span>
+  </div>
+  <div class="eq-grid">
+    <div class="eq"><div class="eq-name">Modelo TGC</div><div class="eq-form">W(t+1)^⅓ = W(t)^⅓<br>+ (TGC·f_total·T)/1000</div><div class="eq-live" id="eqTGC">--</div></div>
+    <div class="eq"><div class="eq-name">f_Temperatura — Gauss</div><div class="eq-form">exp(−½·((T−14)/4.5)²)</div><div class="eq-live" id="eqFT">--</div></div>
+    <div class="eq"><div class="eq-name">f_Oxígeno — Michaelis</div><div class="eq-form">DO/(DO+3.5)<br>si DO > 4.0 mg/L</div><div class="eq-live" id="eqFO">--</div></div>
+    <div class="eq"><div class="eq-name">f_Densidad — Umbral</div><div class="eq-form">1−max(0,(D−20)/25)<br>D en kg/m³</div><div class="eq-live" id="eqFD">--</div></div>
+    <div class="eq"><div class="eq-name">f_Amonio — Lineal</div><div class="eq-form">1−(NH₃−0.012)/0.038<br>umbral sub-letal: 12µg/L</div><div class="eq-live" id="eqFA">--</div></div>
+    <div class="eq"><div class="eq-name">Mortalidad Diaria</div><div class="eq-form">μ = μ_base + 0.003·(1−f)<br>N(t+1) = N·(1−μ)</div><div class="eq-live" id="eqMu">--</div></div>
+    <div class="eq"><div class="eq-name">SGR — Tasa Crec. Esp.</div><div class="eq-form">100 · ln(W(t+1)/W(t))<br>% por día</div><div class="eq-live" id="eqSGR">--</div></div>
+    <div class="eq"><div class="eq-name">FCR & Alim. Diaria</div><div class="eq-form">FCR = ΔAlimento/ΔBiomasa<br>FI = (1.6−0.018√W)% PV</div><div class="eq-live" id="eqFCR">--</div></div>
+  </div>
+</div>
+
+<div class="ft wrap">OceanoTech Innova · Gemelo Digital Salmo salar · Modelo TGC v2.5 · Boids Biológico Validado · Datos ficticios · Propósito científico-demostrativo</div>
+
+    </section>
+  </main>
+</div>
+<script src="app.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   § 1  MODELOS MATEMÁTICOS — Salmo salar
+   ═══════════════════════════════════════════════════════════════════ */
+
+   
+   // Auth guard is handled in app.js — this is a secondary check
+   if (!localStorage.getItem("accessToken")) {
+     window.location.replace("../index.html");
+     throw new Error("Usuario no autenticado");
+   }
+const M = {
+  TGC: 2.85,           // Thermal Growth Coefficient — fase marina
+  TGC_min: 0.40,       // TGC bajo estrés extremo
+  T_opt: 14.0,         // Temperatura óptima °C
+  T_sigma: 4.5,        // Anchura de la curva gaussiana
+  DO_hs: 3.5,          // Constante de semi-saturación O₂
+  DO_crit: 4.0,        // Umbral crítico hipoxia
+  DO_lethal: 2.5,      // Umbral letal
+  DO_pipe: 5.5,        // Umbral inicio piping
+  NH3_sub: 0.012,      // Umbral sub-letal amonio (mg/L)
+  NH3_let: 0.050,      // Umbral letal amonio
+  pH_lo: 7.0, pH_hi: 8.0, pH_min: 6.5, pH_max: 8.5,
+  D_opt: 20, D_max: 45,
+  mu_base: 0.0003,
+  FCR_base: 1.15,
+  harvest_w: 5000,
+  vol: 2000,           // m³ (jaula circular Ø40m × 20m profundidad ~ π×20²×20/π ≈ 2000m³)
+};
+
+// Estrés por temperatura — Gaussiana (Johansson et al. 2014)
+const fTemp  = T  => Math.exp(-0.5 * ((T - M.T_opt) / M.T_sigma) ** 2);
+
+// Estrés por oxígeno disuelto — Michaelis-Menten + hipoxia (Tran-Duy et al. 2012)
+const fOxy   = DO => {
+  if (DO <= M.DO_lethal) return 0;
+  if (DO <= M.DO_crit)   return 0.05 + 0.18 * (DO - M.DO_lethal) / (M.DO_crit - M.DO_lethal);
+  return DO / (DO + M.DO_hs);
+};
+
+// Estrés por densidad — Umbral lineal (Martins et al. 2011)
+const fDens  = D  => D <= M.D_opt ? 1 : D >= M.D_max ? 0.05 : 1 - 0.95 * (D - M.D_opt) / (M.D_max - M.D_opt);
+
+// Estrés por amonio — Declive lineal (Randall & Tsui 2002)
+const fNH3   = a  => a <= M.NH3_sub ? 1 : a >= M.NH3_let ? 0 : 1 - (a - M.NH3_sub) / (M.NH3_let - M.NH3_sub);
+
+// Estrés por pH — Lineal por tramos (Fivelstad et al. 2003)
+const fpH    = pH => {
+  if (pH <= M.pH_min || pH >= M.pH_max) return 0.1;
+  if (pH >= M.pH_lo && pH <= M.pH_hi)   return 1.0;
+  return pH < M.pH_lo
+    ? 0.1 + 0.9 * (pH - M.pH_min) / (M.pH_lo - M.pH_min)
+    : 1.0 - 0.9 * (pH - M.pH_hi)  / (M.pH_max - M.pH_hi);
+};
+
+function stressAll(s, density) {
+  const ft=fTemp(s.temperature), fo=fOxy(s.do), fd=fDens(density),
+        fa=fNH3(s.ammonia),      fp=fpH(s.pH);
+  return { ft, fo, fd, fa, fp, total: ft * fo * fd * fa * fp };
+}
+
+// Un paso diario de simulación
+function simStep(state, sens) {
+  const dens = (state.N * state.W / 1e6) / M.vol * 1000;
+  const st   = stressAll(sens, dens);
+  const f    = st.total;
+
+  // TGC modificado por estrés
+  const TGC_eff    = M.TGC * f + M.TGC_min * (1 - f);
+  const cbrt_old   = Math.cbrt(state.W);
+  const cbrt_new   = cbrt_old + TGC_eff * sens.temperature / 1000;
+  const W_new      = Math.max(Math.cbrt(cbrt_new) ** 3, state.W * 0.999);
+  const SGR        = 100 * Math.log(W_new / state.W);
+
+  // Mortalidad (base + estrés)
+  const mu_stress  = 0.003 * (1 - f) + (sens.do < M.DO_crit ? 0.007 : 0);
+  const mu_daily   = M.mu_base + mu_stress;
+  const N_new      = state.N * (1 - mu_daily);
+  const dead       = state.N - N_new;
+
+  const biomass    = N_new * W_new / 1e6;
+
+  // Consumo pienso & FCR
+  const FI_rate    = Math.max(0.006, 0.016 - 0.00018 * Math.sqrt(W_new));
+  const feed_kg    = N_new * W_new * FI_rate * Math.max(0.08, f) / 1000;
+  const dBio       = biomass - (state.N * state.W / 1e6);
+  const FCR        = dBio > 0.00001 ? (feed_kg / 1000) / dBio : M.FCR_base;
+
+  return { W:W_new, N:N_new, biomass, SGR, FCR:Math.min(FCR,5), mu_daily,
+           dead, stress:st, dens, feed_kg, TGC_eff, cbrt_old, cbrt_new };
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   § 2  BOIDS SALMÓN — Modelo Biológico Validado
+   Refs: Marras et al. (2012, 2015) · Johansson et al. (2014)
+         Martins et al. (2011) · Bjorn & Finstad (1997)
+   ═══════════════════════════════════════════════════════════════════ */
+
+const N_DOTS = 180;   // Agentes de escuela (representan 50,000 peces)
+let dots = [];
+let polarizationIndex = 0;
+
+function initDots(cW, cH) {
+  dots = [];
+  const cx = cW / 2, cy_init = cH * 0.42;
+  for (let i = 0; i < N_DOTS; i++) {
+    // Posición inicial: distribución normal alrededor del centro-superior
+    const a = Math.random() * Math.PI * 2;
+    const r = Math.random() ** 0.5 * Math.min(cW, cH) * 0.3;  // Raíz para distribución uniforme en disco
+    // Velocidad inicial: ligero sesgo anti-horario (rhéotaxis)
+    const swim_a = a + Math.PI / 2;
+    dots.push({
+      x: cx + Math.cos(a) * r,
+      y: cy_init + Math.sin(a) * r * 0.55,
+      vx: Math.cos(swim_a) * 0.6,
+      vy: Math.sin(swim_a) * 0.25,
+      phase: Math.random() * Math.PI * 2,    // Fase circadiana individual
+      hi: (Math.random() - 0.5) * 0.08,      // Variación de salud individual
+    });
+  }
+}
+
+function updateDots(cW, cH) {
+  const DO      = Sensors.cur.do;
+  const T       = Sensors.cur.temperature;
+  const dens_kg = Sim.biomass * 1000 / M.vol;
+  const health  = Sim.lastRes ? Sim.lastRes.stress.total : 0.85;
+  const t_now   = performance.now() * 0.001;
+
+  // ── Longitud corporal en píxeles (escala visual: jaula Ø40m → cW px)
+  // Fork length (cm) = (W_g/1.1)^(1/3) × 10   (condición Fulton K≈1.1)
+  const FL_cm  = (Math.max(Sim.W, 1) / 1.1) ** (1 / 3) * 10;
+  // Pixeles por metro: cW / 40
+  const pxm    = cW / 40;
+  const BL     = Math.max(5, Math.min(22, FL_cm / 100 * pxm));  // BL en px
+
+  // ── Radios de interacción (Marras et al. 2012)
+  const R_SEP = BL * 3.2;   // 3.2 BL — zona de separación
+  const R_ALN = BL * 7.5;   // 7.5 BL — zona de alineación
+  const R_COH = BL * 15.0;  // 15 BL  — zona de cohesión/atracción
+
+  // ── Profundidad preferida (eje Y: 0=superficie, cH=fondo)
+  // Comportamiento de piping (hipoxia) — Thorarensen & Farrell (2011)
+  let yp = cH * 0.42;
+  if      (DO < M.DO_lethal)  yp = cH * 0.03;   // Piping extremo
+  else if (DO < M.DO_crit)    yp = cH * (0.03 + 0.12 * (DO - M.DO_lethal) / (M.DO_crit - M.DO_lethal));
+  else if (DO < M.DO_pipe)    yp = cH * (0.15 + 0.27 * (DO - M.DO_crit) / (M.DO_pipe - M.DO_crit));
+  // Evasión de temperatura alta — buscan aguas más frías y profundas
+  if (T > 16) yp = Math.min(cH * 0.82, yp + cH * 0.07 * (T - 16));
+  if (T < 7)  yp = cH * 0.38;  // Frío: posición media conservadora
+  yp = Math.max(cH * 0.03, Math.min(cH * 0.88, yp));
+
+  // ── Polarización de escuela (Marras et al. 2015)
+  // Alta densidad → flujo laminar circular; bajo DO → pérdida de cohesión
+  const school_tight  = Math.max(0.1, health * (dens_kg > 30 ? 0.7 : 1.0));
+  const rheotaxis_str = Math.max(0.05, health * (dens_kg > 25 ? 1.4 : 1.0) * 0.38);
+
+  // ── Velocidad máxima (U_crit ≈ 1.3 BL/s para Salmo salar — Johansson 2014)
+  const T_spd  = T < 5 ? 0.12 : T < 8 ? 0.3 + 0.4*(T-5)/3 : T <= 18 ? 0.7 + 0.3*(T-8)/10 : Math.max(0.3, 1.0 - 0.14*(T-18));
+  const DO_spd = DO < 3 ? 0.08 : DO < 5 ? 0.1 + 0.55*(DO-3)/2 : 1.0;
+  // Escenarios: calor/amonio → agitación; frío → lentitud
+  const scn_spd = activeScn === 'heatwave' ? 1.45 : activeScn === 'ammonia' ? 1.35 : activeScn === 'storm' ? 1.2 : 1.0;
+  const MAX_SPD = Math.max(0.15, 2.4 * T_spd * DO_spd * scn_spd);
+
+  // Centro de la jaula
+  const cx = cW / 2, cy = cH / 2;
+  const MAX_F = 0.14;
+
+  // ── Precalcular fuerzas (O(n²)) ──
+  const acc = new Float32Array(N_DOTS * 2);
+
+  for (let i = 0; i < dots.length; i++) {
+    const fi = dots[i];
+    let sx=0,sy=0,ns=0;   // Separación
+    let ax=0,ay=0,na=0;   // Alineación
+    let px=0,py=0,nc=0;   // Cohesión
+
+    for (let j = 0; j < dots.length; j++) {
+      if (i === j) continue;
+      const fj = dots[j];
+      const dx = fj.x - fi.x, dy = fj.y - fi.y;
+      const d  = Math.sqrt(dx*dx + dy*dy) + 0.001;
+
+      if (d < R_SEP) {
+        // Separación: huir del vecino
+        sx -= dx / d;  sy -= dy / d;  ns++;
+      }
+      if (d < R_ALN) {
+        // Alineación: coincidir dirección normalizada
+        const vs = Math.hypot(fj.vx, fj.vy) + 0.001;
+        ax += fj.vx / vs;  ay += fj.vy / vs;  na++;
+      }
+      if (d < R_COH) {
+        // Cohesión: buscar centro del grupo
+        px += fj.x;  py += fj.y;  nc++;
+      }
+    }
+
+    let fx = 0, fy = 0;
+
+    // 1. Separación (peso mayor para evitar colapso)
+    if (ns > 0) {
+      const m = Math.hypot(sx, sy);
+      if (m > 0) { fx += sx/m * MAX_F * 1.8;  fy += sy/m * MAX_F * 1.8; }
+    }
+
+    // 2. Alineación (reducida bajo estrés → pérdida de cohesión escolar)
+    if (na > 0) {
+      ax /= na;  ay /= na;
+      fx += (ax * MAX_SPD - fi.vx) * 0.18 * school_tight;
+      fy += (ay * MAX_SPD - fi.vy) * 0.18 * school_tight;
+    }
+
+    // 3. Cohesión
+    if (nc > 0) {
+      const tx = px/nc - fi.x,  ty = py/nc - fi.y;
+      const d  = Math.hypot(tx, ty);
+      if (d > R_COH * 0.25) {
+        fx += tx/d * MAX_F * 0.75 * school_tight;
+        fy += ty/d * MAX_F * 0.75 * school_tight;
+      }
+    }
+
+    // 4. Rheotaxis anti-horaria (corriente circular en jaula)
+    // Salmon orient counter-current: tangente CCW en eje canvas (y↓)
+    const rdx = fi.x - cx,  rdy = fi.y - cy;
+    const rr  = Math.hypot(rdx, rdy) + 0.001;
+    fx += (-rdy / rr) * MAX_F * rheotaxis_str;
+    fy +=  (rdx / rr) * MAX_F * rheotaxis_str;
+
+    // 5. Atractor de profundidad preferida
+    const dy_pref = yp - fi.y;
+    const hypoxia_pull = DO < M.DO_pipe ? 4.5 * (M.DO_pipe - DO) / M.DO_pipe : 1.0;
+    fy += dy_pref * 0.007 * hypoxia_pull;
+
+    // 6. Evitación de paredes (elástico)
+    const wm = BL * 3.5;
+    if (fi.x < wm)       fx += MAX_F * 2.8 * (wm - fi.x) / wm;
+    if (fi.x > cW - wm)  fx -= MAX_F * 2.8 * (fi.x - (cW - wm)) / wm;
+    if (fi.y < 4)         fy += MAX_F * 3.2;   // Barrera superficial (excepto piping extremo)
+    if (fi.y > cH - 5)    fy -= MAX_F * 3.0;   // Barrera de fondo
+
+    // 7. Comportamientos específicos por escenario
+    // — Piojo de mar: saltos de escape (Bjorn & Finstad 1997)
+    if (activeScn === 'lice' && Math.random() < 0.0008) {
+      dots[i].vy -= 7 + Math.random() * 6;   // Impulso vertical súbito
+    }
+    // — Amonio: giros erráticos + hipersensibilidad (Randall & Tsui 2002)
+    if (activeScn === 'ammonia' && Math.random() < 0.014) {
+      fx += (Math.random() - 0.5) * MAX_F * 5;
+      fy += (Math.random() - 0.5) * MAX_F * 3;
+    }
+    // — Estrés térmico agudo: agitación aumentada
+    if (T > 18) {
+      fx += (Math.random() - 0.5) * MAX_F * (T - 17) * 1.5;
+      fy += (Math.random() - 0.5) * MAX_F * (T - 17) * 0.7;
+    }
+    // — Tormenta: turbulencia hidrodinámica
+    if (activeScn === 'storm') {
+      const turb_noise = Math.sin(t_now * 3.1 + fi.phase) * MAX_F * 1.2;
+      fx += turb_noise;
+      fy += Math.cos(t_now * 2.7 + fi.phase) * MAX_F * 0.9;
+    }
+    // — Alta densidad: comprensión lateral → nado laminar (Martins et al. 2011)
+    if (dens_kg > 28) {
+      const lam_scale = Math.min(1, (dens_kg - 28) / 15);
+      // Refuerza rheotaxis → nado circular más uniforme
+      fx += (-rdy / rr) * MAX_F * lam_scale * 0.5;
+      fy +=  (rdx / rr) * MAX_F * lam_scale * 0.5;
+    }
+
+    // 8. Ruido biológico (variación individual + ciclo circadiano)
+    const diel = 0.75 + 0.25 * Math.sin(fi.phase + t_now * 0.05);
+    const noise_amp = (0.18 + (1 - health) * 0.55) * MAX_F * diel;
+    fx += (Math.random() - 0.5) * noise_amp * 2.2;
+    fy += (Math.random() - 0.5) * noise_amp * 0.85;
+
+    acc[i * 2]     = fx;
+    acc[i * 2 + 1] = fy;
+  }
+
+  // ── Aplicar aceleraciones + límite de velocidad ──
+  let sumVx = 0, sumVy = 0;
+
+  dots.forEach((f, i) => {
+    f.vx = f.vx * 0.91 + acc[i * 2]     * 0.09;
+    f.vy = f.vy * 0.91 + acc[i * 2 + 1] * 0.09;
+
+    const spd = Math.hypot(f.vx, f.vy);
+    if (spd > MAX_SPD) { f.vx *= MAX_SPD / spd;  f.vy *= MAX_SPD / spd; }
+
+    f.x += f.vx;
+    f.y += f.vy;
+    f.x  = Math.max(3, Math.min(cW - 3, f.x));
+    f.y  = Math.max(3, Math.min(cH - 3, f.y));
+
+    // Acumular para polarización
+    if (spd > 0.05) { sumVx += f.vx / spd;  sumVy += f.vy / spd; }
+  });
+
+  // Índice de polarización Φ (Marras et al. 2012)
+  polarizationIndex = Math.hypot(sumVx, sumVy) / dots.length;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   § 3  ESTADO DE LA SIMULACIÓN
+   ═══════════════════════════════════════════════════════════════════ */
+
+const Sim = {
+  day: 0, W: 80, N: 50000,
+  biomass: 80 * 50000 / 1e6,
+  history: [],
+  accumFeed: 0, accumDead: 0,
+  lastRes: null,
+  paused: false,
+  speed: 1,
+  startDate: new Date('2025-01-15'),
+};
+const MAX_HIST = 600;
+
+function pushHist(r) {
+  Sim.history.push({ day:Sim.day, W:r.W, N:r.N, biomass:r.biomass,
+    SGR:r.SGR, FCR:r.FCR, mu:r.mu_daily, stress:r.stress.total,
+    dens:r.dens, feed:r.feed_kg, sens:{...Sensors.cur} });
+  if (Sim.history.length > MAX_HIST) Sim.history.shift();
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   § 4  SIMULACIÓN DE SENSORES FICTICIOS
+   ═══════════════════════════════════════════════════════════════════ */
+
+const Sensors = {
+  cur: { temperature:12.4, do:8.4, salinity:33.1, pH:7.84, ammonia:0.008, turbidity:2.2, flow:1185 },
+  tgt: { temperature:12.4, do:8.4, salinity:33.1, pH:7.84, ammonia:0.008, turbidity:2.2, flow:1185 },
+  noise: { temperature:.11, do:.065, salinity:.038, pH:.011, ammonia:.00075, turbidity:.16, flow:16 },
+};
+
+const SCENARIOS = {
+  normal:   { temperature:12.5, do:8.5, salinity:33.1, pH:7.85, ammonia:0.008, turbidity:2.1, flow:1200, days:9999, name:'Condiciones nominales' },
+  heatwave: { temperature:21.4, do:6.1, salinity:33.7, pH:7.96, ammonia:0.019, turbidity:3.6, flow:975,  days:14,   name:'Ola de Calor' },
+  hypoxia:  { temperature:13.2, do:3.4, salinity:33.0, pH:7.71, ammonia:0.015, turbidity:4.6, flow:590,  days:7,    name:'Hipoxia' },
+  algae:    { temperature:16.6, do:4.7, salinity:33.0, pH:9.0,  ammonia:0.012, turbidity:29,  flow:940,  days:10,   name:'Bloom Algal' },
+  storm:    { temperature:8.6,  do:9.9, salinity:31.7, pH:7.50, ammonia:0.011, turbidity:44,  flow:370,  days:3,    name:'Tormenta' },
+  ammonia:  { temperature:13.1, do:7.3, salinity:33.0, pH:7.57, ammonia:0.044, turbidity:3.3, flow:975,  days:5,    name:'Pico de Amonio' },
+  cold:     { temperature:6.0,  do:11.0,salinity:34.1, pH:7.67, ammonia:0.007, turbidity:2.3, flow:1110, days:21,   name:'Agua Fría' },
+  lice:     { temperature:12.5, do:7.9, salinity:33.1, pH:7.79, ammonia:0.017, turbidity:3.9, flow:1060, days:30,   name:'Piojo de Mar' },
+};
+
+let activeScn = 'normal', scnDaysLeft = 9999;
+
+function setScenario(name) {
+  activeScn = name;
+  const sc  = SCENARIOS[name];
+  Object.assign(Sensors.tgt, sc);
+  scnDaysLeft = sc.days;
+  document.querySelectorAll('.scbtn').forEach(b => b.classList.remove('on'));
+  const map = ['heatwave','hypoxia','algae','storm','ammonia','cold','lice','normal'];
+  const idx = map.indexOf(name);
+  document.querySelectorAll('.scbtn')[idx]?.classList.add('on');
+  document.getElementById('scLabel').textContent = sc.name.toUpperCase();
+  pushAlert(sc.name + ' — activado', name === 'normal' ? 'ok' : 'warn');
+}
+
+function stepSensors() {
+  const externalSensors = window.GlobalState?.getLatestSensorData?.();
+  if (externalSensors?.data) Object.assign(Sensors.tgt, externalSensors.data);
+  const s = Sensors;
+  Object.keys(s.cur).forEach(k => {
+    const d = s.tgt[k] - s.cur[k];
+    s.cur[k] += d * 0.07 + (Math.random() - 0.5) * 2 * s.noise[k];
+  });
+  // Variación estacional de temperatura (±2°C, ciclo 365d)
+  s.cur.temperature += 2 * Math.sin((Sim.day / 365) * 2 * Math.PI - Math.PI / 2) * 0.012;
+  s.cur.do          = Math.max(0.5, Math.min(14, s.cur.do));
+  s.cur.pH          = Math.max(6.2, Math.min(9.4, s.cur.pH));
+  s.cur.ammonia     = Math.max(0, Math.min(0.065, s.cur.ammonia));
+  s.cur.turbidity   = Math.max(0.4, s.cur.turbidity);
+  s.cur.flow        = Math.max(80, s.cur.flow);
+  s.cur.temperature = Math.max(2, Math.min(28, s.cur.temperature));
+
+  if (activeScn !== 'normal') {
+    scnDaysLeft--;
+    if (scnDaysLeft <= 0) {
+      setScenario('normal');
+      pushAlert('Escenario finalizado — retorno a condiciones nominales', 'ok');
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   § 5  RENDERIZADO DE LA JAULA (Canvas)
+   ═══════════════════════════════════════════════════════════════════ */
+
+let tankCanvas, dotsInited = false;
+
+function renderTank() {
+  const cv  = tankCanvas;
+  const ctx = cv.getContext('2d');
+  const W   = cv.width, H = cv.height;
+  if (W < 10 || H < 10) return;
+
+  if (!dotsInited) { initDots(W, H); dotsInited = true; }
+
+  const DO    = Sensors.cur.do;
+  const T     = Sensors.cur.temperature;
+  const turb  = Sensors.cur.turbidity;
+  const health = Sim.lastRes ? Sim.lastRes.stress.total : 0.85;
+
+  // ── 1. Fondo: gradiente de profundidad ──
+  const warmR = Math.max(0, Math.min(40, (T - 8) / 14 * 40));
+  const wg    = ctx.createLinearGradient(0, 0, 0, H);
+  wg.addColorStop(0,   `rgba(${12+warmR}, ${28+warmR/2}, ${85}, 1)`);
+  wg.addColorStop(0.55,`rgba(${7+warmR/2}, ${17}, ${62}, 1)`);
+  wg.addColorStop(1,   `rgba(4, 10, 38, 1)`);
+  ctx.fillStyle = wg;  ctx.fillRect(0, 0, W, H);
+
+  // ── 2. Capa hipóxica en fondo (cuando DO bajo) ──
+  if (DO < 6) {
+    const hyp_h   = H * Math.max(0, (6 - DO) / 6 * 0.35);
+    const hg      = ctx.createLinearGradient(0, H - hyp_h, 0, H);
+    hg.addColorStop(0, 'rgba(70, 15, 0, 0)');
+    hg.addColorStop(1, `rgba(80, 20, 0, ${(6 - DO) / 6 * 0.55})`);
+    ctx.fillStyle = hg;  ctx.fillRect(0, H - hyp_h, W, hyp_h);
+  }
+
+  // ── 3. Turbidez ──
+  ctx.fillStyle = `rgba(75, 58, 18, ${Math.min(0.62, turb / 50 * 0.75)})`;
+  ctx.fillRect(0, 0, W, H);
+
+  // ── 4. Malla de red (textura) ──
+  ctx.strokeStyle = 'rgba(0, 200, 225, 0.06)';
+  ctx.lineWidth   = 0.7;
+  for (let x = 22; x < W; x += 22) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+  for (let y = 18; y < H; y += 18) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+  // ── 5. Actualizar y dibujar puntos de salmón ──
+  updateDots(W - 22, H);  // Dejar 22px para histograma
+
+  // Color según salud individual: H=0(rojo) → H=135(verde) HSL
+  const dot_r = Math.max(1.6, Math.min(3.2, (Sim.W / 800) ** (1/3) * 1.5));
+  dots.forEach(f => {
+    const h_ind = Math.max(0, Math.min(1, health + f.hi));
+    const hue   = Math.round(h_ind * 135);       // 0=rojo, 135=verde
+    const sat   = 88;
+    const lig   = 42 + h_ind * 12;
+
+    if (h_ind < 0.35) {
+      ctx.shadowBlur  = 4.5;
+      ctx.shadowColor = `hsl(${hue},${sat}%,58%)`;
+    }
+
+    ctx.beginPath();
+    ctx.arc(f.x, f.y, dot_r, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(${hue},${sat}%,${lig}%,0.92)`;
+    ctx.fill();
+  });
+  ctx.shadowBlur = 0;
+
+  // ── 6. Histograma de distribución batimétrica (borde derecho) ──
+  const BANDS = 16;
+  const hist  = new Uint16Array(BANDS);
+  const histX = W - 20;
+  dots.forEach(f => {
+    const b = Math.min(BANDS - 1, Math.floor(f.y / (H / BANDS)));
+    hist[b]++;
+  });
+  const maxH  = Math.max(1, ...hist);
+  ctx.fillStyle = 'rgba(0,200,220,0.25)';
+  for (let b = 0; b < BANDS; b++) {
+    const bh  = H / BANDS;
+    const bw  = (hist[b] / maxH) * 18;
+    ctx.fillRect(histX, b * bh + 1, bw, bh - 2);
+  }
+  ctx.strokeStyle = 'rgba(0,200,220,0.2)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(histX - 1, 0, 21, H);
+
+  // ── 7. Línea de piping (hipoxia visible) ──
+  if (DO < M.DO_pipe) {
+    const pipe_y = H * (0.03 + 0.18 * (DO / M.DO_pipe));
+    ctx.strokeStyle = `rgba(255, 140, 0, ${(M.DO_pipe - DO) / M.DO_pipe * 0.7})`;
+    ctx.lineWidth   = 1;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(0, pipe_y); ctx.lineTo(histX, pipe_y); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(255,140,0,0.6)';
+    ctx.font = '7px IBM Plex Mono';
+    ctx.fillText('PIPING', 6, pipe_y - 3);
+  }
+
+  // ── 8. Escala de profundidad (izquierda) ──
+  ctx.fillStyle  = 'rgba(0,200,220,0.4)';
+  ctx.font       = '7px IBM Plex Mono';
+  ctx.textAlign  = 'left';
+  for (let d = 0; d <= 20; d += 5) {
+    const yy = 2 + (H - 4) * (d / 20);
+    ctx.fillText(`${d}m`, 3, yy + 3);
+    ctx.strokeStyle = 'rgba(0,200,220,0.1)'; ctx.lineWidth = 0.5;
+    ctx.beginPath(); ctx.moveTo(22, yy); ctx.lineTo(histX - 4, yy); ctx.stroke();
+  }
+
+  // ── 9. Superposición T / DO / estado ──
+  ctx.fillStyle = DO < M.DO_crit ? 'rgba(255,80,40,.85)' : DO < 6 ? 'rgba(240,165,0,.8)' : 'rgba(0,200,220,.6)';
+  ctx.font      = '8px IBM Plex Mono';
+  ctx.fillText(`DO: ${Sensors.cur.do.toFixed(1)} mg/L`, 25, H - 11);
+  ctx.fillStyle = 'rgba(0,200,220,.55)';
+  ctx.fillText(`T: ${Sensors.cur.temperature.toFixed(1)}°C`, W - 90, H - 11);
+  ctx.textAlign = 'left';
+
+  // ── 10. Borde de jaula (resplandor teal) ──
+  ctx.shadowBlur  = 10; ctx.shadowColor = '#00c8d8';
+  ctx.strokeStyle = 'rgba(0,205,225,0.65)'; ctx.lineWidth = 2;
+  ctx.strokeRect(1, 1, W - 2, H - 2);
+  ctx.shadowBlur = 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   § 6  RENDERIZADO DE GRÁFICOS
+   ═══════════════════════════════════════════════════════════════════ */
+
+function renderBioChart(cv) {
+  const ctx = cv.getContext('2d');
+  const W = cv.clientWidth; cv.width = W;
+  const H = cv.height;
+  ctx.clearRect(0,0,W,H);
+  if (Sim.history.length < 2) return;
+
+  const pad = {l:50, r:50, t:10, b:26};
+  const cW  = W - pad.l - pad.r, cH = H - pad.t - pad.b;
+  const hist = Sim.history;
+
+  const maxDay = Math.max(500, Sim.day + 80);
+  const maxBio = Math.max(8, ...hist.map(h=>h.biomass)) * 1.12;
+  const maxWt  = Math.max(400, ...hist.map(h=>h.W)) * 1.12;
+
+  const sx  = d => pad.l + (d / maxDay) * cW;
+  const syB = v => pad.t + cH - (v / maxBio) * cH;
+  const syW = v => pad.t + cH - (v / maxWt)  * cH;
+
+  // Grid
+  ctx.strokeStyle='rgba(0,180,210,.08)'; ctx.lineWidth=1;
+  for (let i=0;i<=5;i++){const y=pad.t+(i/5)*cH; ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+cW,y);ctx.stroke();}
+
+  // Área biomasa
+  const gg = ctx.createLinearGradient(0,pad.t,0,pad.t+cH);
+  gg.addColorStop(0,'rgba(0,200,220,.2)'); gg.addColorStop(1,'rgba(0,200,220,.02)');
+  ctx.beginPath();
+  ctx.moveTo(sx(hist[0].day), syB(hist[0].biomass));
+  for(let i=1;i<hist.length;i++){
+    const cx2=(sx(hist[i-1].day)+sx(hist[i].day))/2;
+    ctx.bezierCurveTo(cx2,syB(hist[i-1].biomass),cx2,syB(hist[i].biomass),sx(hist[i].day),syB(hist[i].biomass));
+  }
+  ctx.lineTo(sx(hist.at(-1).day),pad.t+cH); ctx.lineTo(sx(hist[0].day),pad.t+cH);
+  ctx.closePath(); ctx.fillStyle=gg; ctx.fill();
+
+  // Línea biomasa
+  ctx.beginPath();
+  ctx.moveTo(sx(hist[0].day), syB(hist[0].biomass));
+  for(let i=1;i<hist.length;i++){
+    const cx2=(sx(hist[i-1].day)+sx(hist[i].day))/2;
+    ctx.bezierCurveTo(cx2,syB(hist[i-1].biomass),cx2,syB(hist[i].biomass),sx(hist[i].day),syB(hist[i].biomass));
+  }
+  ctx.strokeStyle='#00c8d8'; ctx.lineWidth=2; ctx.stroke();
+
+  // Línea peso
+  ctx.beginPath();
+  ctx.moveTo(sx(hist[0].day), syW(hist[0].W));
+  for(let i=1;i<hist.length;i++){
+    const cx2=(sx(hist[i-1].day)+sx(hist[i].day))/2;
+    ctx.bezierCurveTo(cx2,syW(hist[i-1].W),cx2,syW(hist[i].W),sx(hist[i].day),syW(hist[i].W));
+  }
+  ctx.strokeStyle='#5090ff'; ctx.lineWidth=1.8; ctx.stroke();
+
+  // Predicción (punteada)
+  const dth = harvestDays();
+  if (dth > 0 && dth < 600) {
+    ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(sx(Sim.day),syW(Sim.W)); ctx.lineTo(sx(Sim.day+dth),syW(M.harvest_w));
+    ctx.strokeStyle='rgba(255,195,50,.55)'; ctx.lineWidth=1.5; ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Ejes
+  ctx.fillStyle='rgba(90,155,185,.75)'; ctx.font='500 8.5px IBM Plex Mono'; ctx.textAlign='right';
+  for(let i=0;i<=4;i++) ctx.fillText((maxBio*i/4).toFixed(0)+'t', pad.l-3, syB(maxBio*i/4)+3);
+  ctx.textAlign='left';
+  for(let i=0;i<=4;i++) ctx.fillText((maxWt*i/4).toFixed(0)+'g', W-pad.r+3, syW(maxWt*i/4)+3);
+  ctx.fillStyle='rgba(90,155,185,.6)';
+  for(let i=0;i<=5;i++) ctx.fillText('d'+Math.round(maxDay*i/5), sx(maxDay*i/5)-6, pad.t+cH+14);
+
+  // Línea de hoy
+  ctx.strokeStyle='rgba(0,220,255,.35)'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+  ctx.beginPath(); ctx.moveTo(sx(Sim.day),pad.t); ctx.lineTo(sx(Sim.day),pad.t+cH); ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function renderSGRChart(cv) {
+  const ctx = cv.getContext('2d');
+  const W = cv.clientWidth; cv.width = W;
+  const H = cv.height;
+  ctx.clearRect(0,0,W,H);
+  const h = Sim.history.slice(-110);
+  if (h.length < 2) return;
+  const pad={l:36,r:36,t:8,b:20};
+  const cW=W-pad.l-pad.r, cH=H-pad.t-pad.b;
+  const maxS=Math.max(0.5,...h.map(d=>d.SGR))*1.15;
+  const maxF=Math.max(1.5,...h.map(d=>d.FCR))*1.1;
+  const sx=i=>pad.l+(i/(h.length-1))*cW;
+  const syS=v=>pad.t+cH-(v/maxS)*cH;
+  const syF=v=>pad.t+cH-(v/maxF)*cH;
+  ctx.strokeStyle='rgba(0,180,210,.07)'; ctx.lineWidth=1;
+  for(let i=0;i<=3;i++){const y=pad.t+(i/3)*cH; ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+cW,y);ctx.stroke();}
+  const bw=Math.max(1,cW/h.length-0.6);
+  h.forEach((d,i)=>{
+    const bh=Math.max(0,(d.SGR/maxS)*cH);
+    ctx.fillStyle=(d.SGR>0.85?'#00d97e':d.SGR>0.4?'#f0a500':'#ff4044')+'99';
+    ctx.fillRect(sx(i)-bw/2,pad.t+cH-bh,bw,bh);
+  });
+  ctx.beginPath(); h.forEach((d,i)=>i===0?ctx.moveTo(sx(i),syF(d.FCR)):ctx.lineTo(sx(i),syF(d.FCR)));
+  ctx.strokeStyle='rgba(255,145,45,.8)'; ctx.lineWidth=1.5; ctx.stroke();
+  ctx.fillStyle='rgba(0,200,100,.8)'; ctx.font='8px IBM Plex Mono';
+  ctx.fillText('SGR '+Sim.history.at(-1)?.SGR.toFixed(3)+'%/d', pad.l+3, pad.t+10);
+  ctx.fillStyle='rgba(255,145,45,.8)';
+  ctx.fillText('FCR '+Sim.history.at(-1)?.FCR.toFixed(2), W-pad.r-52, pad.t+10);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   § 7  INTERFAZ DE USUARIO
+   ═══════════════════════════════════════════════════════════════════ */
+
+const SENS_CFG = [
+  {k:'temperature',label:'Temperatura',  unit:'°C',   min:2, max:25, gd:[10,16],  wn:[7,19]},
+  {k:'do',         label:'O₂ Disuelto', unit:'mg/L', min:0, max:14, gd:[7,12],   wn:[4,7]},
+  {k:'salinity',   label:'Salinidad',   unit:'PSU',  min:28,max:36, gd:[30,35],  wn:[28,30]},
+  {k:'pH',         label:'pH',          unit:'',     min:6, max:9,  gd:[7,8],    wn:[6.5,8.5]},
+  {k:'ammonia',    label:'Amonio NH₃',  unit:'µg/L', min:0, max:60, gd:[0,8],    wn:[8,20], scale:1000},
+  {k:'turbidity',  label:'Turbidez',    unit:'NTU',  min:0, max:50, gd:[0,5],    wn:[5,15]},
+  {k:'flow',       label:'Caudal',      unit:'L/min',min:0, max:2000,gd:[800,1500],wn:[400,800]},
+];
+
+function buildSensorCards() {
+  const el = document.getElementById('sensList');
+  el.innerHTML = '';
+  SENS_CFG.forEach(c => {
+    el.insertAdjacentHTML('beforeend',
+     `<div class="sc" id="sc_${c.k}">
+        <div class="sc-top">
+          <span class="sc-name">${c.label}</span>
+          <span>
+            <span class="sc-val" id="sv_${c.k}">--</span>
+            <span class="sc-unit">${c.unit}</span>
+            <span class="sc-status" id="ss_${c.k}">--</span>
+          </span>
+        </div>
+        <div class="gauge-trk"><div class="gauge-fill" id="sg_${c.k}" style="width:0%;height:100%;border-radius:2px;"></div></div>
+      </div>`);
+  });
+}
+
+function updateSensorCards() {
+  const s = Sensors.cur;
+  SENS_CFG.forEach(c => {
+    let v   = s[c.k];
+    const d = c.scale ? (v * c.scale).toFixed(1) : c.k==='pH'?v.toFixed(2):v.toFixed(1);
+    document.getElementById('sv_'+c.k).textContent = d;
+    const pct = Math.max(0, Math.min(100, (v - c.min) / (c.max - c.min) * 100));
+    const fill = document.getElementById('sg_'+c.k);
+    fill.style.width = pct + '%';
+    let st, cl;
+    if (v >= c.gd[0] && v <= c.gd[1]) { st='OK'; cl='#00d97e'; }
+    else if (v >= c.wn[0] && v <= c.wn[1]) { st='ALERTA'; cl='#f0a500'; }
+    else { st='CRÍTICO'; cl='#ff4044'; }
+    fill.style.background = cl;
+    const ss = document.getElementById('ss_'+c.k);
+    ss.textContent = st;
+    ss.className   = 'sc-status '+(st==='OK'?'s-ok':st==='ALERTA'?'s-warn':'s-err');
+  });
+}
+
+function colorFor(v) {
+  return v >= 0.8 ? '#00d97e' : v >= 0.5 ? '#f0a500' : '#ff4044';
+}
+
+function setBar(fId, vId, v) {
+  const fe = document.getElementById(fId), ve = document.getElementById(vId);
+  fe.style.width      = (v * 100).toFixed(1) + '%';
+  fe.style.background = colorFor(v);
+  ve.style.color      = colorFor(v);
+  ve.textContent      = v.toFixed(3);
+}
+
+function harvestDays() {
+  const s   = Sensors.cur;
+  const dn  = Sim.biomass * 1000 / M.vol;
+  const f   = fTemp(s.temperature)*fOxy(s.do)*fDens(dn)*fNH3(s.ammonia)*fpH(s.pH);
+  const tgc = M.TGC * f + M.TGC_min * (1-f);
+  const inc = tgc * Math.max(0.1, s.temperature) / 1000;
+  if (inc <= 0) return 9999;
+  const rem = Math.cbrt(M.harvest_w) - Math.cbrt(Sim.W);
+  return rem <= 0 ? 0 : Math.round(rem / inc);
+}
+
+function getBehaviorState() {
+  const DO = Sensors.cur.do, T = Sensors.cur.temperature;
+  const dn = Sim.biomass*1000/M.vol;
+  if (DO < M.DO_lethal)             return {label:'⚠ PIPING CRÍTICO — Lethal hypoxia', color:'#ff4044'};
+  if (DO < M.DO_crit)               return {label:'⚠ PIPING — Hipoxia aguda',           color:'#ff6620'};
+  if (DO < M.DO_pipe)               return {label:'↑ Búsqueda O₂ — Hipoxia leve',        color:'#f0a500'};
+  if (T > 20)                       return {label:'⚡ Estrés térmico agudo',               color:'#ff6020'};
+  if (T < 6)                        return {label:'❄ Termoinhibición — T crítica',         color:'#60c0ff'};
+  if (T < 9)                        return {label:'↓ Actividad reducida — Agua fría',      color:'#90d0ff'};
+  if (dn > 35)                      return {label:'⟳ Nado laminar — Alta densidad',        color:'#80bfff'};
+  if (activeScn === 'lice')         return {label:'↕ Conducta anti-ectoparásito',          color:'#f0a500'};
+  if (activeScn === 'ammonia')      return {label:'↯ Estrés neurotóxico — NH₃',            color:'#ff6060'};
+  if (polarizationIndex > 0.68)     return {label:'◎ Escuela polarizada — Óptimo',         color:'#00d97e'};
+  if (polarizationIndex > 0.42)     return {label:'◎ Escuela moderada — Normal',           color:'#80d060'};
+  return {label:'≋ Escuela dispersa — Estrés subagudo',                                       color:'#f0a500'};
+}
+
+let alertTotal = 0;
+let alertThresh = { do:true, temp:true, nh3:true, dens:true };
+
+function pushAlert(msg, lvl='ok') {
+  alertTotal++;
+  document.getElementById('alertCnt').textContent = alertTotal + ' eventos';
+  const log  = document.getElementById('alertLog');
+  const now  = new Date();
+  const ts   = `d${Sim.day} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  const item = document.createElement('div');
+  item.className = 'ai';
+  item.innerHTML = `<span class="ai-dot a-${lvl}"></span><span>${msg}</span><span class="ai-time">${ts}</span>`;
+  log.insertBefore(item, log.firstChild);
+  while (log.children.length > 14) log.removeChild(log.lastChild);
+}
+
+function checkAlerts() {
+  const s  = Sensors.cur, th = alertThresh;
+  const dn = Sim.biomass*1000/M.vol;
+  if (s.do < M.DO_crit  && th.do)   { pushAlert(`ALERTA: Hipoxia crítica — DO ${s.do.toFixed(1)} mg/L`, 'err'); th.do=false; }
+  if (s.do >= M.DO_crit)             th.do=true;
+  if ((s.temperature>19||s.temperature<7) && th.temp) { pushAlert(`ALERTA: Temperatura fuera de rango — ${s.temperature.toFixed(1)}°C`,'warn'); th.temp=false; }
+  if (s.temperature>=7 && s.temperature<=19)           th.temp=true;
+  if (s.ammonia>M.NH3_sub && th.nh3) { pushAlert(`ALERTA: Amonio elevado — ${(s.ammonia*1000).toFixed(1)} µg/L`,'warn'); th.nh3=false; }
+  if (s.ammonia<=M.NH3_sub)          th.nh3=true;
+  if (dn>M.D_opt && th.dens)         { pushAlert(`AVISO: Densidad elevada — ${dn.toFixed(1)} kg/m³`,'warn'); th.dens=false; }
+  if (dn<=M.D_opt)                   th.dens=true;
+}
+
+function updateUI(r) {
+  if (!r) return;
+  const s = Sensors.cur;
+  const dn = r.dens;
+
+  // Header KPIs
+  document.getElementById('hBio').innerHTML  = r.biomass.toFixed(1)+'<span class="kpi-u">t</span>';
+  document.getElementById('hW').innerHTML    = r.W.toFixed(0)+'<span class="kpi-u">g</span>';
+  document.getElementById('hSGR').innerHTML  = r.SGR.toFixed(3)+'<span class="kpi-u">%/d</span>';
+  document.getElementById('hFCR').textContent= r.FCR.toFixed(2);
+  document.getElementById('hMu').innerHTML   = (r.mu_daily*100).toFixed(4)+'<span class="kpi-u">%/d</span>';
+  document.getElementById('dayPill').textContent = 'Día '+Sim.day;
+
+  // Tank stats
+  document.getElementById('tsN').textContent = Math.round(r.N).toLocaleString('es-CL');
+  document.getElementById('tsDen').innerHTML  = dn.toFixed(1)+'<small>kg/m³</small>';
+  document.getElementById('tsD').innerHTML    = Math.round(Sim.accumDead).toLocaleString('es-CL')+'<small>peces</small>';
+  const hi = r.stress.total;
+  const tsH = document.getElementById('tsH');
+  tsH.textContent = (hi*100).toFixed(1)+'%';
+  tsH.style.color = colorFor(hi);
+
+  // Behavioral state
+  const bs = getBehaviorState();
+  document.getElementById('behavLabel').textContent = bs.label;
+  document.getElementById('behavLabel').style.color  = bs.color;
+  document.getElementById('behavDot').style.background = bs.color;
+  document.getElementById('behavDot').style.boxShadow  = `0 0 7px ${bs.color}`;
+  document.getElementById('behavPhi').textContent = `Φ=${polarizationIndex.toFixed(2)}`;
+
+  // Stress bars
+  setBar('sfT','sfTv', r.stress.ft);
+  setBar('sfO','sfOv', r.stress.fo);
+  setBar('sfD','sfDv', r.stress.fd);
+  setBar('sfA','sfAv', r.stress.fa);
+  setBar('sfP','sfPv', r.stress.fp);
+  const ftEl = document.getElementById('fTotalLbl');
+  ftEl.textContent = 'f_total = '+hi.toFixed(4);
+  ftEl.style.color = colorFor(hi);
+
+  // Harvest
+  const dth = harvestDays();
+  document.getElementById('hvDays').textContent = dth < 9999 ? dth.toLocaleString('es-CL') : '∞';
+  const hDate = new Date(Sim.startDate.getTime() + (Sim.day + dth)*86400000);
+  document.getElementById('hvDate').textContent = hDate.toLocaleDateString('es-CL',{month:'short',year:'numeric'});
+  document.getElementById('hvBio').innerHTML = (r.N*M.harvest_w/1e6).toFixed(1)+'<span style="font-size:.6rem;color:var(--text2)"> t</span>';
+  document.getElementById('hvFeed').innerHTML= (Sim.accumFeed/1000).toFixed(1)+'<span style="font-size:.6rem;color:var(--text2)"> t</span>';
+  const pct = Math.min(100,(Math.cbrt(r.W)-Math.cbrt(80))/(Math.cbrt(M.harvest_w)-Math.cbrt(80))*100);
+  document.getElementById('hvBar').style.width = pct.toFixed(2)+'%';
+  document.getElementById('hvPct').textContent  = pct.toFixed(1)+'% objetivo';
+
+  // Ecuaciones matemáticas (valores live)
+  document.getElementById('eqTGC').innerHTML =
+    `W^⅓: ${r.cbrt_old.toFixed(4)} → <span class="eq-r">${r.cbrt_new.toFixed(4)}</span> | TGC_eff=${r.TGC_eff.toFixed(3)}, T=${s.temperature.toFixed(1)}°C`;
+  document.getElementById('eqFT').innerHTML  = `T=${s.temperature.toFixed(1)}°C → <span class="eq-r">${r.stress.ft.toFixed(4)}</span>`;
+  document.getElementById('eqFO').innerHTML  = `DO=${s.do.toFixed(2)} mg/L → <span class="eq-r">${r.stress.fo.toFixed(4)}</span>`;
+  document.getElementById('eqFD').innerHTML  = `D=${dn.toFixed(2)} kg/m³ → <span class="eq-r">${r.stress.fd.toFixed(4)}</span>`;
+  document.getElementById('eqFA').innerHTML  = `NH₃=${(s.ammonia*1000).toFixed(1)} µg/L → <span class="eq-r">${r.stress.fa.toFixed(4)}</span>`;
+  document.getElementById('eqMu').innerHTML  = `μ=<span class="eq-r">${(r.mu_daily*100).toFixed(4)}%/d</span> | ↓${r.dead.toFixed(1)} peces/d`;
+  document.getElementById('eqSGR').innerHTML = `SGR = <span class="eq-r">${r.SGR.toFixed(4)}%/d</span>`;
+  document.getElementById('eqFCR').innerHTML = `FCR=<span class="eq-r">${r.FCR.toFixed(3)}</span> | Feed=${r.feed_kg.toFixed(0)} kg/d`;
+
+  updateSensorCards();
+  checkAlerts();
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   § 8  BUCLE PRINCIPAL E INICIALIZACIÓN
+   ═══════════════════════════════════════════════════════════════════ */
+
+let bioCV, sgrCV;
+let stepAccum = 0, lastT = 0;
+
+function setSpeed(n) {
+  Sim.speed = n;
+  [1,5,30].forEach(v => document.getElementById('sp'+v).classList.toggle('on', v===n));
+}
+
+function togglePause() {
+  Sim.paused = !Sim.paused;
+  const b = document.getElementById('pauseBtn');
+  b.textContent = Sim.paused ? '▶ REANUDAR' : '⏸ PAUSA';
+  b.classList.toggle('on', Sim.paused);
+}
+
+function loop(ts) {
+  requestAnimationFrame(loop);
+  const dt = Math.min((ts - lastT) / 1000, 0.25);
+  lastT = ts;
+
+  // Actualizar tamaño canvas
+  if (tankCanvas.width !== tankCanvas.clientWidth) {
+    tankCanvas.width = tankCanvas.clientWidth;
+    dotsInited = false;
+  }
+
+  // Simulación
+  if (!Sim.paused) {
+    stepAccum += Sim.speed * dt;
+    const steps = Math.floor(stepAccum);
+    stepAccum  -= steps;
+    for (let i = 0; i < steps; i++) {
+      stepSensors();
+      const r = simStep({W:Sim.W, N:Sim.N, biomass:Sim.biomass}, Sensors.cur);
+      Sim.W = r.W; Sim.N = r.N; Sim.biomass = r.biomass;
+      Sim.day++; Sim.accumFeed += r.feed_kg; Sim.accumDead += r.dead;
+      Sim.lastRes = r;
+      pushHist(r);
+    }
+    if (steps > 0) updateUI(Sim.lastRes);
+  }
+
+  window.GlobalState?.setTwinSnapshot?.({
+    day: Sim.day,
+    individualWeight: Sim.W,
+    population: Sim.N,
+    biomass: Sim.biomass,
+    accumulatedFeed: Sim.accumFeed,
+    accumulatedMortality: Sim.accumDead,
+    lastResult: Sim.lastRes,
+    sensors: { ...Sensors.cur }
+  });
+
+  // Renderizado: la simulacion sigue corriendo en #captacion, pero se evita pintar canvas ocultos.
+  if (window.AppRouter?.isRouteActive?.('gemelo') !== false) {
+    renderTank();
+    if (bioCV.clientWidth > 0) { bioCV.width = bioCV.clientWidth; renderBioChart(bioCV); }
+    if (sgrCV.clientWidth > 0) { sgrCV.width = sgrCV.clientWidth; renderSGRChart(sgrCV); }
+  }
+}
+
+window.addEventListener('load', () => {
+  tankCanvas = document.getElementById('tankCanvas');
+  bioCV      = document.getElementById('bioChart');
+  sgrCV      = document.getElementById('sgrChart');
+
+  buildSensorCards();
+  setScenario('normal');
+
+  // Pre-sembrar 90 días de historia
+  Object.assign(Sensors.cur, {...Sensors.tgt});
+  for (let i = 0; i < 90; i++) {
+    stepSensors();
+    const r = simStep({W:Sim.W, N:Sim.N, biomass:Sim.biomass}, Sensors.cur);
+    Sim.W=r.W; Sim.N=r.N; Sim.biomass=r.biomass;
+    Sim.day++; Sim.accumFeed+=r.feed_kg; Sim.accumDead+=r.dead; Sim.lastRes=r;
+    pushHist(r);
+  }
+  updateUI(Sim.lastRes);
+  window.GlobalState?.setTwinSnapshot?.({
+    day: Sim.day,
+    individualWeight: Sim.W,
+    population: Sim.N,
+    biomass: Sim.biomass,
+    accumulatedFeed: Sim.accumFeed,
+    accumulatedMortality: Sim.accumDead,
+    lastResult: Sim.lastRes,
+    sensors: { ...Sensors.cur }
+  });
+  pushAlert(`Simulación iniciada — Día ${Sim.day} · Smolt 80g → objetivo 5,000g`, 'ok');
+  pushAlert(`Jaula Ø40m × 20m · ${Sim.N.toFixed(0)} individuos · Boids Biológico Activo`, 'ok');
+
+  tankCanvas.width = tankCanvas.clientWidth;
+  window.addEventListener('resize', () => { dotsInited = false; });
+
+  requestAnimationFrame(ts => { lastT = ts; loop(ts); });
+  
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "name": "oceanotech-auth-backend",
+  "version": "1.0.0",
+  "description": "Backend de autenticación para Oceanotech (registro, login, JWT, bloqueo de cuenta, listo para reCAPTCHA)",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "seed": "node src/seed.js",
+    "test:integration:supabase": "node scripts/run-supabase-integration.js",
+    "test": "node --test tests/auth-api.test.js tests/server-startup.test.js tests/supabase-integration-runner.test.js && node tests/test.domain.js && node tests/test.simulator.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "better-sqlite3": "^13.0.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "express-validator": "^7.2.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

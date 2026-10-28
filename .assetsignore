@@ -1,0 +1,26 @@
+# Repository metadata and configuration files.
+/.*
+/**/.*
+/package.json
+/package-lock.json
+/wrangler.toml
+
+# Backend source, local data, and dependencies.
+/oceanotech-backend/
+/src/
+/migrations/
+/**/node_modules/
+/**/tests/
+/**/*.test.*
+/**/*.sqlite
+/**/*.sqlite-*
+/**/*.db
+/.dev.vars
+/.dev.vars.*
+
+# Internal documentation, tests, and archived frontend files.
+/*.md
+/**/*.md
+/Dashboard/tests.html
+/Dashboard/index.backup-before-spa-*.html
+/Dashboard/Script.d.ts
